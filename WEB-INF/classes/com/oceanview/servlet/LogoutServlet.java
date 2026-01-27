@@ -1,13 +1,11 @@
 package com.oceanview.servlet;
 
-import jakarta.servlet.*;
-import jakarta.servlet.http.*;
+import javax.servlet.*;
+import javax.servlet.http.*;
+import javax.servlet.annotation.WebServlet;
 import java.io.*;
 
-/**
- * LogoutServlet - Handles user logout
- * Invalidates session and redirects to login page
- */
+@WebServlet("/logout")
 public class LogoutServlet extends HttpServlet {
     
     @Override

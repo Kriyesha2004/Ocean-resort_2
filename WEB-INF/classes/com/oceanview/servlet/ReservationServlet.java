@@ -1,7 +1,8 @@
 package com.oceanview.servlet;
 
-import jakarta.servlet.*;
-import jakarta.servlet.http.*;
+import javax.servlet.*;
+import javax.servlet.http.*;
+import javax.servlet.annotation.WebServlet;
 import java.io.*;
 import java.sql.*;
 import java.time.LocalDate;
@@ -9,10 +10,7 @@ import java.time.format.DateTimeFormatter;
 import com.oceanview.util.DBConnection;
 import com.oceanview.service.BillingService;
 
-/**
- * ReservationServlet - Handles guest reservation creation and management
- * Processes reservation data and stores it in the database with billing information
- */
+@WebServlet("/reservation")
 public class ReservationServlet extends HttpServlet {
     
     private BillingService billingService = new BillingService();

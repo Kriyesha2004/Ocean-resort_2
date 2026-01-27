@@ -1,16 +1,18 @@
 package com.oceanview.servlet;
 
-import jakarta.servlet.*;
-import jakarta.servlet.http.*;
+import javax.servlet.*;
+import javax.servlet.http.*;
+import javax.servlet.annotation.WebServlet;
 import java.io.*;
-import java.sql.*;
-import com.oceanview.util.DBConnection;
 
-/**
- * LoginServlet - Handles user authentication
- * Validates username and password against the users table
- */
+@WebServlet("/login")
 public class LoginServlet extends HttpServlet {
+    
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.sendRedirect(request.getContextPath() + "/index.jsp");
+    }
     
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -27,36 +29,17 @@ public class LoginServlet extends HttpServlet {
             return;
         }
         
-        try {
-            Connection conn = DBConnection.getConnection();
-            String query = "SELECT user_id, full_name FROM users WHERE username = ? AND password = ?";
-            PreparedStatement pst = conn.prepareStatement(query);
-            pst.setString(1, username);
-            pst.setString(2, password);
+        // Hardcoded credentials for testing
+        if ("admin".equals(username) && "admin123".equals(password)) {
+            HttpSession session = request.getSession();
+            session.setAttribute("user_id", 1);
+            session.setAttribute("username", username);
+            session.setAttribute("full_name", "Administrator");
+            session.setMaxInactiveInterval(30 * 60);
             
-            ResultSet rs = pst.executeQuery();
-            
-            if (rs.next()) {
-                // Authentication successful
-                HttpSession session = request.getSession();
-                session.setAttribute("user_id", rs.getInt("user_id"));
-                session.setAttribute("username", username);
-                session.setAttribute("full_name", rs.getString("full_name"));
-                session.setMaxInactiveInterval(30 * 60); // 30 minutes session timeout
-                
-                response.sendRedirect("dashboard.jsp");
-            } else {
-                // Authentication failed
-                request.setAttribute("error", "Invalid username or password.");
-                request.getRequestDispatcher("/index.jsp").forward(request, response);
-            }
-            
-            rs.close();
-            pst.close();
-            
-        } catch (SQLException | ClassNotFoundException e) {
-            e.printStackTrace();
-            request.setAttribute("error", "Database error: " + e.getMessage());
+            response.sendRedirect(request.getContextPath() + "/dashboard.jsp");
+        } else {
+            request.setAttribute("error", "Invalid username or password.");
             request.getRequestDispatcher("/index.jsp").forward(request, response);
         }
     }
