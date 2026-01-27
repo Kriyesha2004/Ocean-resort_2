@@ -1,0 +1,52 @@
+@startuml Reservation_Sequence_Diagram
+title Ocean View Resort - Reservation Creation Sequence Diagram
+
+actor Staff
+participant Browser
+participant ReservationServlet
+participant BillingService
+participant DBConnection
+database MySQL
+
+Staff -> Browser: Fill Reservation Form
+Browser -> Browser: Validate Form (JavaScript)
+Browser -> ReservationServlet: POST /reservation\n(guest details, dates, room type)
+activate ReservationServlet
+
+ReservationServlet -> ReservationServlet: Validate Input
+alt Invalid Input
+    ReservationServlet --> Browser: Return with error message
+    Browser --> Staff: Display validation error
+else Valid Input
+    ReservationServlet -> ReservationServlet: Parse Check-In/Check-Out Dates
+    
+    ReservationServlet -> BillingService: calculateBill(checkIn, checkOut, roomType)
+    activate BillingService
+    BillingService -> BillingService: Calculate Nights
+    BillingService -> BillingService: Get Rate Per Night
+    BillingService -> BillingService: Calculate Total Bill
+    BillingService --> ReservationServlet: Return Total Bill & Nights
+    deactivate BillingService
+    
+    ReservationServlet -> DBConnection: getConnection()
+    activate DBConnection
+    DBConnection --> ReservationServlet: Connection Object
+    deactivate DBConnection
+    
+    ReservationServlet -> MySQL: INSERT INTO reservations\n(guest_name, room_type, check_in,\ncheck_out, total_bill, status, created_by)
+    activate MySQL
+    MySQL --> ReservationServlet: Reservation ID (res_id)
+    deactivate MySQL
+    
+    ReservationServlet -> MySQL: INSERT INTO billing\n(res_id, nights, room_type,\nrate_per_night, total_bill)
+    activate MySQL
+    MySQL --> ReservationServlet: Success/Failure
+    deactivate MySQL
+    
+    ReservationServlet --> Browser: Forward to reservations-list.jsp\nwith success message
+    Browser --> Staff: Display Confirmation & Reservation Details
+end
+
+deactivate ReservationServlet
+
+@enduml

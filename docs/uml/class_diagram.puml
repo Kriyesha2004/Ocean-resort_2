@@ -1,0 +1,99 @@
+@startuml Class_Diagram
+title Ocean View Resort - Class Diagram
+
+package "com.oceanview.util" {
+    class DBConnection {
+        - connection: Connection (static)
+        + getConnection(): Connection (static)
+        + closeConnection(): void (static)
+    }
+}
+
+package "com.oceanview.service" {
+    class BillingService {
+        - SINGLE_ROOM_RATE: double
+        - DOUBLE_ROOM_RATE: double
+        - LUXURY_ROOM_RATE: double
+        + getRatePerNight(roomType: String): double
+        + calculateNights(checkIn: LocalDate, checkOut: LocalDate): long
+        + calculateBill(nights: long, roomType: String): double
+        + calculateBill(checkIn: LocalDate, checkOut: LocalDate, roomType: String): double
+        + calculateBillWithTax(nights: long, roomType: String, taxPercentage: double): double
+        + formatBill(amount: double): String
+        + getRateDescription(roomType: String): String
+    }
+}
+
+package "com.oceanview.servlet" {
+    class HttpServlet {
+    }
+    
+    class LoginServlet extends HttpServlet {
+        + doPost(request: HttpServletRequest, response: HttpServletResponse): void
+    }
+    
+    class ReservationServlet extends HttpServlet {
+        - billingService: BillingService
+        + doPost(request: HttpServletRequest, response: HttpServletResponse): void
+        - createReservation(request: HttpServletRequest, response: HttpServletResponse): void
+        - updateReservation(request: HttpServletRequest, response: HttpServletResponse): void
+        - deleteReservation(request: HttpServletRequest, response: HttpServletResponse): void
+    }
+    
+    class LogoutServlet extends HttpServlet {
+        + doGet(request: HttpServletRequest, response: HttpServletResponse): void
+        + doPost(request: HttpServletRequest, response: HttpServletResponse): void
+    }
+}
+
+package "jakarta.servlet" {
+    interface ServletRequest {
+    }
+    interface ServletResponse {
+    }
+    class HttpServletRequest {
+    }
+    class HttpServletResponse {
+    }
+    
+    ServletRequest <|.. HttpServletRequest
+    ServletResponse <|.. HttpServletResponse
+}
+
+package "java.sql" {
+    class Connection {
+        + prepareStatement(sql: String): PreparedStatement
+        + close(): void
+        + isClosed(): boolean
+    }
+    
+    class PreparedStatement {
+        + setString(parameterIndex: int, x: String): void
+        + setInt(parameterIndex: int, x: int): void
+        + setDouble(parameterIndex: int, x: double): void
+        + setDate(parameterIndex: int, x: java.sql.Date): void
+        + executeQuery(): ResultSet
+        + executeUpdate(): int
+    }
+    
+    class ResultSet {
+        + next(): boolean
+        + getString(columnName: String): String
+        + getInt(columnName: String): int
+        + getDouble(columnName: String): double
+        + close(): void
+    }
+}
+
+LoginServlet ..> DBConnection: uses
+LoginServlet ..> Connection: uses
+LoginServlet ..> PreparedStatement: uses
+LoginServlet ..> ResultSet: uses
+
+ReservationServlet ..> DBConnection: uses
+ReservationServlet ..> BillingService: uses
+ReservationServlet ..> Connection: uses
+ReservationServlet ..> PreparedStatement: uses
+ReservationServlet ..> ResultSet: uses
+
+@enduml

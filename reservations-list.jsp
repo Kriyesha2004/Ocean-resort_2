@@ -1,0 +1,110 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="java.sql.*" %>
+<%
+    if (session.getAttribute("user_id") == null) {
+        response.sendRedirect("index.jsp");
+        return;
+    }
+%>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reservations - Ocean View Resort</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <%@ include file="navbar.jsp" %>
+    
+    <div class="container-fluid py-4">
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h1 class="display-6 text-primary">All Reservations</h1>
+                    <a href="reservation.jsp" class="btn btn-primary">
+                        <i class="bi bi-plus-circle"></i> New Reservation
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card shadow-sm border-0">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Res. ID</th>
+                                <th>Guest Name</th>
+                                <th>Room Type</th>
+                                <th>Check-In</th>
+                                <th>Check-Out</th>
+                                <th>Total Bill</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <%
+                                try {
+                                    Class.forName("com.mysql.cj.jdbc.Driver");
+                                    Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/ocean_view_db", "root", "password");
+                                    String query = "SELECT res_id, guest_name, room_type, check_in, check_out, total_bill, status FROM reservations ORDER BY created_at DESC";
+                                    PreparedStatement pst = conn.prepareStatement(query);
+                                    ResultSet rs = pst.executeQuery();
+                                    
+                                    while (rs.next()) {
+                                        int resId = rs.getInt("res_id");
+                                        String guestName = rs.getString("guest_name");
+                                        String roomType = rs.getString("room_type");
+                                        String checkIn = rs.getString("check_in");
+                                        String checkOut = rs.getString("check_out");
+                                        double bill = rs.getDouble("total_bill");
+                                        String status = rs.getString("status");
+                                        
+                                        String statusBadge = "secondary";
+                                        if ("Confirmed".equals(status)) statusBadge = "success";
+                                        else if ("Checked-In".equals(status)) statusBadge = "info";
+                                        else if ("Cancelled".equals(status)) statusBadge = "danger";
+                            %>
+                            <tr>
+                                <td><strong>#<%= resId %></strong></td>
+                                <td><%= guestName %></td>
+                                <td><%= roomType %></td>
+                                <td><%= checkIn %></td>
+                                <td><%= checkOut %></td>
+                                <td><strong>$<%= String.format("%.2f", bill) %></strong></td>
+                                <td><span class="badge bg-<%= statusBadge %>"><%= status %></span></td>
+                                <td>
+                                    <a href="#" class="btn btn-sm btn-info" title="View Details">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    <a href="#" class="btn btn-sm btn-warning" title="Edit">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <button type="button" class="btn btn-sm btn-danger" title="Delete">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <%
+                                    }
+                                    rs.close();
+                                    pst.close();
+                                    conn.close();
+                                } catch (Exception e) {
+                                    out.println("<tr><td colspan='8' class='text-center text-danger'>Error loading reservations: " + e.getMessage() + "</td></tr>");
+                                }
+                            %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

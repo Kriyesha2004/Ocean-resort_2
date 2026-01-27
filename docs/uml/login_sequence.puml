@@ -1,0 +1,47 @@
+@startuml Login_Sequence_Diagram
+title Ocean View Resort - Login Process Sequence Diagram
+
+actor User
+participant Browser
+participant LoginServlet
+participant DBConnection
+database MySQL
+
+User -> Browser: Enter Username & Password
+Browser -> LoginServlet: POST /login (username, password)
+activate LoginServlet
+
+LoginServlet -> DBConnection: getConnection()
+activate DBConnection
+DBConnection -> MySQL: Check if connection exists
+activate MySQL
+MySQL --> DBConnection: Connection OK or New Connection
+deactivate MySQL
+DBConnection --> LoginServlet: Return Connection Object
+deactivate DBConnection
+
+LoginServlet -> LoginServlet: Validate Input Parameters
+alt Invalid Input
+    LoginServlet --> Browser: Forward to index.jsp with error
+    Browser --> User: Display Error Message
+else Valid Input
+    LoginServlet -> MySQL: Execute Query\nSELECT user_id, full_name\nFROM users\nWHERE username = ? AND password = ?
+    activate MySQL
+    MySQL --> LoginServlet: ResultSet
+    deactivate MySQL
+    
+    alt User Found
+        LoginServlet -> LoginServlet: Create Session
+        LoginServlet -> LoginServlet: Set Session Attributes\n(user_id, username, full_name)
+        LoginServlet -> LoginServlet: Set Session Timeout (30 min)
+        LoginServlet --> Browser: Redirect to dashboard.jsp
+        Browser --> User: Display Dashboard
+    else User Not Found
+        LoginServlet --> Browser: Forward to index.jsp with error
+        Browser --> User: Display "Invalid Credentials" Error
+    end
+end
+
+deactivate LoginServlet
+
+@enduml

@@ -1,0 +1,188 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="java.sql.*" %>
+<%
+    if (session.getAttribute("user_id") == null) {
+        response.sendRedirect("index.jsp");
+        return;
+    }
+%>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Ocean View Resort</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <%@ include file="navbar.jsp" %>
+    
+    <div class="container-fluid py-4">
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <h1 class="display-6 text-primary">
+                    <i class="bi bi-speedometer2"></i> Dashboard
+                </h1>
+                <p class="text-muted">Welcome, <%= session.getAttribute("full_name") %>!</p>
+            </div>
+        </div>
+        
+        <div class="row g-4">
+            <!-- Total Reservations Card -->
+            <div class="col-md-6 col-lg-3">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <h6 class="card-title text-muted mb-1">Total Reservations</h6>
+                                <h2 class="text-primary mb-0">
+                                    <%
+                                        try {
+                                            Class.forName("com.mysql.cj.jdbc.Driver");
+                                            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/ocean_view_db", "root", "password");
+                                            PreparedStatement pst = conn.prepareStatement("SELECT COUNT(*) as count FROM reservations");
+                                            ResultSet rs = pst.executeQuery();
+                                            if (rs.next()) {
+                                                out.print(rs.getInt("count"));
+                                            }
+                                            rs.close();
+                                            pst.close();
+                                            conn.close();
+                                        } catch (Exception e) {
+                                            out.print("0");
+                                        }
+                                    %>
+                                </h2>
+                            </div>
+                            <div class="text-primary" style="font-size: 2rem;">📅</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Checked-In Guests Card -->
+            <div class="col-md-6 col-lg-3">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <h6 class="card-title text-muted mb-1">Checked-In</h6>
+                                <h2 class="text-success mb-0">
+                                    <%
+                                        try {
+                                            Class.forName("com.mysql.cj.jdbc.Driver");
+                                            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/ocean_view_db", "root", "password");
+                                            PreparedStatement pst = conn.prepareStatement("SELECT COUNT(*) as count FROM reservations WHERE status = 'Checked-In'");
+                                            ResultSet rs = pst.executeQuery();
+                                            if (rs.next()) {
+                                                out.print(rs.getInt("count"));
+                                            }
+                                            rs.close();
+                                            pst.close();
+                                            conn.close();
+                                        } catch (Exception e) {
+                                            out.print("0");
+                                        }
+                                    %>
+                                </h2>
+                            </div>
+                            <div class="text-success" style="font-size: 2rem;">✓</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Pending Reservations Card -->
+            <div class="col-md-6 col-lg-3">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <h6 class="card-title text-muted mb-1">Pending</h6>
+                                <h2 class="text-warning mb-0">
+                                    <%
+                                        try {
+                                            Class.forName("com.mysql.cj.jdbc.Driver");
+                                            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/ocean_view_db", "root", "password");
+                                            PreparedStatement pst = conn.prepareStatement("SELECT COUNT(*) as count FROM reservations WHERE status = 'Pending'");
+                                            ResultSet rs = pst.executeQuery();
+                                            if (rs.next()) {
+                                                out.print(rs.getInt("count"));
+                                            }
+                                            rs.close();
+                                            pst.close();
+                                            conn.close();
+                                        } catch (Exception e) {
+                                            out.print("0");
+                                        }
+                                    %>
+                                </h2>
+                            </div>
+                            <div class="text-warning" style="font-size: 2rem;">⏳</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Revenue This Month Card -->
+            <div class="col-md-6 col-lg-3">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <h6 class="card-title text-muted mb-1">Revenue (Month)</h6>
+                                <h2 class="text-info mb-0">
+                                    $
+                                    <%
+                                        try {
+                                            Class.forName("com.mysql.cj.jdbc.Driver");
+                                            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/ocean_view_db", "root", "password");
+                                            PreparedStatement pst = conn.prepareStatement("SELECT SUM(total_bill) as revenue FROM reservations WHERE MONTH(created_at) = MONTH(NOW()) AND YEAR(created_at) = YEAR(NOW())");
+                                            ResultSet rs = pst.executeQuery();
+                                            if (rs.next()) {
+                                                Double revenue = rs.getDouble("revenue");
+                                                out.print(String.format("%.2f", revenue != null ? revenue : 0));
+                                            }
+                                            rs.close();
+                                            pst.close();
+                                            conn.close();
+                                        } catch (Exception e) {
+                                            out.print("0.00");
+                                        }
+                                    %>
+                                </h2>
+                            </div>
+                            <div class="text-info" style="font-size: 2rem;">💰</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row g-4 mt-3">
+            <!-- Quick Actions -->
+            <div class="col-md-12">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-light border-bottom">
+                        <h5 class="card-title mb-0">Quick Actions</h5>
+                    </div>
+                    <div class="card-body">
+                        <a href="reservation.jsp" class="btn btn-primary me-2 mb-2">
+                            <i class="bi bi-plus-circle"></i> New Reservation
+                        </a>
+                        <a href="reservations-list.jsp" class="btn btn-secondary me-2 mb-2">
+                            <i class="bi bi-list-ul"></i> View Reservations
+                        </a>
+                        <a href="reports.jsp" class="btn btn-info me-2 mb-2">
+                            <i class="bi bi-file-earmark-pdf"></i> Reports
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
