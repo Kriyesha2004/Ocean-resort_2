@@ -1,7 +1,7 @@
 -- Ocean View Resort Database Schema
 -- Create the database
-CREATE DATABASE IF NOT EXISTS o_resort_view_db;
-USE o_resort_view_db;
+CREATE DATABASE IF NOT EXISTS ocean_view_db;
+USE ocean_view_db;
 
 -- Table for Staff Login
 CREATE TABLE users (
