@@ -13,6 +13,7 @@ CREATE TABLE users (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+
 -- Table for Guest Reservations
 CREATE TABLE reservations (
     res_id INT PRIMARY KEY AUTO_INCREMENT,

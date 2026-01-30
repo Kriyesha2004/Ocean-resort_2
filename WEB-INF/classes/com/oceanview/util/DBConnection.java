@@ -8,15 +8,16 @@ import java.sql.*;
  */
 public class DBConnection {
     private static Connection connection = null;
-    
+
     private DBConnection() {
         // Private constructor to prevent instantiation
     }
-    
+
     /**
      * Get database connection using Singleton pattern
+     * 
      * @return Connection object
-     * @throws SQLException if database connection fails
+     * @throws SQLException           if database connection fails
      * @throws ClassNotFoundException if MySQL driver is not found
      */
     public static Connection getConnection() throws SQLException, ClassNotFoundException {
@@ -24,10 +25,9 @@ public class DBConnection {
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver");
                 connection = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3306/ocean_view_db",
-                    "root",
-                    "password"
-                );
+                        "jdbc:mysql://localhost:3306/ocean_view_db?useSSL=false&allowPublicKeyRetrieval=true",
+                        "root",
+                        "");
                 System.out.println("Database connection established successfully.");
             } catch (SQLException e) {
                 System.err.println("Failed to establish database connection: " + e.getMessage());
@@ -36,7 +36,7 @@ public class DBConnection {
         }
         return connection;
     }
-    
+
     /**
      * Close database connection
      */
