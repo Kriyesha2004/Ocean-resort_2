@@ -12,17 +12,26 @@ import com.oceanview.service.BillingService;
 
 @WebServlet("/reservation")
 public class ReservationServlet extends HttpServlet {
-    
+
     private BillingService billingService = new BillingService();
-    
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         String action = request.getParameter("action");
-        
+
         if ("create".equals(action)) {
-            createReservation(request, response);
+            // Staff creating reservation - requires login
+            HttpSession session = request.getSession();
+            if (session.getAttribute("user_id") == null) {
+                response.sendRedirect("index.jsp");
+                return;
+            }
+            createReservation(request, response, (Integer) session.getAttribute("user_id"), false);
+        } else if ("public_booking".equals(action)) {
+            // Guest creating reservation - no login required
+            createReservation(request, response, null, true);
         } else if ("update".equals(action)) {
             updateReservation(request, response);
         } else if ("delete".equals(action)) {
@@ -31,10 +40,11 @@ public class ReservationServlet extends HttpServlet {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid action");
         }
     }
-    
-    private void createReservation(HttpServletRequest request, HttpServletResponse response)
+
+    private void createReservation(HttpServletRequest request, HttpServletResponse response, Integer userId,
+            boolean isPublic)
             throws ServletException, IOException {
-        
+
         try {
             String guestName = request.getParameter("guest_name");
             String address = request.getParameter("address");
@@ -43,44 +53,38 @@ public class ReservationServlet extends HttpServlet {
             String roomType = request.getParameter("room_type");
             String checkInStr = request.getParameter("check_in");
             String checkOutStr = request.getParameter("check_out");
-            
+
+            String errorPage = isPublic ? "/booking.jsp" : "/reservation.jsp";
+
             // Validate input
-            if (guestName == null || guestName.isEmpty() || roomType == null || 
-                checkInStr == null || checkOutStr == null) {
+            if (guestName == null || guestName.isEmpty() || roomType == null ||
+                    checkInStr == null || checkOutStr == null) {
                 request.setAttribute("error", "All required fields must be filled.");
-                request.getRequestDispatcher("/reservation.jsp").forward(request, response);
+                request.getRequestDispatcher(errorPage).forward(request, response);
                 return;
             }
-            
+
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             LocalDate checkInDate = LocalDate.parse(checkInStr, formatter);
             LocalDate checkOutDate = LocalDate.parse(checkOutStr, formatter);
-            
+
             // Validate dates
             if (checkOutDate.isBefore(checkInDate)) {
                 request.setAttribute("error", "Check-out date cannot be before check-in date.");
-                request.getRequestDispatcher("/reservation.jsp").forward(request, response);
+                request.getRequestDispatcher(errorPage).forward(request, response);
                 return;
             }
-            
+
             // Calculate bill
             double totalBill = billingService.calculateBill(checkInDate, checkOutDate, roomType);
             long nights = billingService.calculateNights(checkInDate, checkOutDate);
-            
-            // Get user_id from session
-            HttpSession session = request.getSession();
-            Integer userId = (Integer) session.getAttribute("user_id");
-            
-            if (userId == null) {
-                response.sendRedirect("index.jsp");
-                return;
-            }
-            
+
             // Insert reservation into database
             Connection conn = DBConnection.getConnection();
-            String query = "INSERT INTO reservations (guest_name, address, contact_no, email, room_type, check_in, check_out, total_bill, status, created_by) " +
-                          "VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'Pending', ?)";
-            
+            String query = "INSERT INTO reservations (guest_name, address, contact_no, email, room_type, check_in, check_out, total_bill, status, created_by) "
+                    +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'Pending', ?)";
+
             PreparedStatement pst = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             pst.setString(1, guestName);
             pst.setString(2, address);
@@ -90,19 +94,25 @@ public class ReservationServlet extends HttpServlet {
             pst.setDate(6, java.sql.Date.valueOf(checkInDate));
             pst.setDate(7, java.sql.Date.valueOf(checkOutDate));
             pst.setDouble(8, totalBill);
-            pst.setInt(9, userId);
-            
+
+            if (userId != null) {
+                pst.setInt(9, userId);
+            } else {
+                pst.setNull(9, java.sql.Types.INTEGER);
+            }
+
             int affectedRows = pst.executeUpdate();
-            
+
             if (affectedRows > 0) {
                 // Get the generated reservation ID
                 ResultSet rs = pst.getGeneratedKeys();
                 if (rs.next()) {
                     int resId = rs.getInt(1);
-                    
+
                     // Insert billing record
-                    String billingQuery = "INSERT INTO billing (res_id, nights, room_type, rate_per_night, total_bill) " +
-                                        "VALUES (?, ?, ?, ?, ?)";
+                    String billingQuery = "INSERT INTO billing (res_id, nights, room_type, rate_per_night, total_bill) "
+                            +
+                            "VALUES (?, ?, ?, ?, ?)";
                     PreparedStatement billingPst = conn.prepareStatement(billingQuery);
                     billingPst.setInt(1, resId);
                     billingPst.setLong(2, nights);
@@ -110,32 +120,37 @@ public class ReservationServlet extends HttpServlet {
                     billingPst.setDouble(4, billingService.getRatePerNight(roomType));
                     billingPst.setDouble(5, totalBill);
                     billingPst.executeUpdate();
-                    
+
                     request.setAttribute("success", "Reservation created successfully!");
                     request.setAttribute("reservationId", resId);
                     request.setAttribute("totalBill", String.format("%.2f", totalBill));
                     request.setAttribute("nights", nights);
+
+                    if (isPublic) {
+                        request.getRequestDispatcher("/booking-success.jsp").forward(request, response);
+                    } else {
+                        request.getRequestDispatcher("/reservations-list.jsp").forward(request, response);
+                    }
                 }
                 rs.close();
             }
-            
+
             pst.close();
-            request.getRequestDispatcher("/reservations-list.jsp").forward(request, response);
-            
+
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("error", "Error creating reservation: " + e.getMessage());
-            request.getRequestDispatcher("/reservation.jsp").forward(request, response);
+            request.getRequestDispatcher(isPublic ? "/booking.jsp" : "/reservation.jsp").forward(request, response);
         }
     }
-    
+
     private void updateReservation(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         // Implementation for updating reservations
         request.setAttribute("success", "Reservation updated successfully!");
         request.getRequestDispatcher("/reservations-list.jsp").forward(request, response);
     }
-    
+
     private void deleteReservation(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         // Implementation for deleting reservations
