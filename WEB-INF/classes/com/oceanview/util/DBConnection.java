@@ -25,9 +25,9 @@ public class DBConnection {
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver");
                 connection = DriverManager.getConnection(
-                        "jdbc:mysql://localhost:3306/ocean_view_db?useSSL=false&allowPublicKeyRetrieval=true",
+                        "jdbc:mysql://localhost:3306/ocean_view_db",
                         "root",
-                        "");
+                        "password");
                 System.out.println("Database connection established successfully.");
             } catch (SQLException e) {
                 System.err.println("Failed to establish database connection: " + e.getMessage());
