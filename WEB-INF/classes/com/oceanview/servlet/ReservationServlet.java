@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import com.oceanview.util.DBConnection;
 import com.oceanview.service.BillingService;
+import com.oceanview.service.ReservationService;
 
 @WebServlet("/reservation")
 public class ReservationServlet extends HttpServlet {
@@ -71,6 +72,14 @@ public class ReservationServlet extends HttpServlet {
             // Validate dates
             if (checkOutDate.isBefore(checkInDate)) {
                 request.setAttribute("error", "Check-out date cannot be before check-in date.");
+                request.getRequestDispatcher(errorPage).forward(request, response);
+                return;
+            }
+
+            // NEW: Check Availability
+            ReservationService resService = new ReservationService();
+            if (!resService.isRoomAvailable(roomType, checkInDate, checkOutDate)) {
+                request.setAttribute("error", "Sorry, " + roomType + " rooms are fully booked for the selected dates.");
                 request.getRequestDispatcher(errorPage).forward(request, response);
                 return;
             }
