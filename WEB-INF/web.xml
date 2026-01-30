@@ -9,6 +9,15 @@
     <description>3-Tier Architecture Web Application for Resort Management</description>
     
     <!-- Servlets use @WebServlet annotations - no mapping needed here -->
+
+    <servlet>
+        <servlet-name>home</servlet-name>
+        <jsp-file>/home.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>home</servlet-name>
+        <url-pattern>/home</url-pattern>
+    </servlet-mapping>
     
     <!-- Welcome files -->
     <welcome-file-list>
