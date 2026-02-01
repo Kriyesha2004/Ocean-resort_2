@@ -37,6 +37,8 @@ public class ReservationServlet extends HttpServlet {
             updateReservation(request, response);
         } else if ("delete".equals(action)) {
             deleteReservation(request, response);
+        } else if ("update_status".equals(action)) {
+            updateStatus(request, response);
         } else {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid action");
         }
@@ -155,15 +157,99 @@ public class ReservationServlet extends HttpServlet {
 
     private void updateReservation(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Implementation for updating reservations
-        request.setAttribute("success", "Reservation updated successfully!");
-        request.getRequestDispatcher("/reservations-list.jsp").forward(request, response);
+        try {
+            int resId = Integer.parseInt(request.getParameter("id"));
+            String guestName = request.getParameter("guest_name");
+            String address = request.getParameter("address");
+            String contactNo = request.getParameter("contact_no");
+            String email = request.getParameter("email");
+            String roomType = request.getParameter("room_type");
+            LocalDate checkInDate = LocalDate.parse(request.getParameter("check_in"));
+            LocalDate checkOutDate = LocalDate.parse(request.getParameter("check_out"));
+
+            // Re-calculate bill if room or dates changed
+            double totalBill = billingService.calculateBill(checkInDate, checkOutDate, roomType);
+
+            Connection conn = DBConnection.getConnection();
+            String query = "UPDATE reservations SET guest_name=?, address=?, contact_no=?, email=?, room_type=?, check_in=?, check_out=?, total_bill=? WHERE res_id=?";
+
+            PreparedStatement pst = conn.prepareStatement(query);
+            pst.setString(1, guestName);
+            pst.setString(2, address);
+            pst.setString(3, contactNo);
+            pst.setString(4, email);
+            pst.setString(5, roomType);
+            pst.setDate(6, java.sql.Date.valueOf(checkInDate));
+            pst.setDate(7, java.sql.Date.valueOf(checkOutDate));
+            pst.setDouble(8, totalBill);
+            pst.setInt(9, resId);
+
+            pst.executeUpdate();
+            pst.close();
+            conn.close();
+
+            request.setAttribute("success", "Reservation updated successfully!");
+            request.getRequestDispatcher("/reservations-list.jsp").forward(request, response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            request.setAttribute("error", "Error updating reservation: " + e.getMessage());
+            request.getRequestDispatcher("/reservations-list.jsp").forward(request, response);
+        }
     }
 
     private void deleteReservation(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Implementation for deleting reservations
-        request.setAttribute("success", "Reservation deleted successfully!");
-        request.getRequestDispatcher("/reservations-list.jsp").forward(request, response);
+        try {
+            int resId = Integer.parseInt(request.getParameter("id"));
+
+            Connection conn = DBConnection.getConnection();
+
+            // Delete billing first due to foreign key
+            String deleteBilling = "DELETE FROM billing WHERE res_id=?";
+            PreparedStatement pstBill = conn.prepareStatement(deleteBilling);
+            pstBill.setInt(1, resId);
+            pstBill.executeUpdate();
+            pstBill.close();
+
+            // Delete reservation
+            String query = "DELETE FROM reservations WHERE res_id=?";
+            PreparedStatement pst = conn.prepareStatement(query);
+            pst.setInt(1, resId);
+            pst.executeUpdate();
+            pst.close();
+            conn.close();
+
+            request.setAttribute("success", "Reservation deleted successfully!");
+            request.getRequestDispatcher("/reservations-list.jsp").forward(request, response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            request.setAttribute("error", "Error deleting reservation: " + e.getMessage());
+            request.getRequestDispatcher("/reservations-list.jsp").forward(request, response);
+        }
+    }
+
+    private void updateStatus(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            int resId = Integer.parseInt(request.getParameter("id"));
+            String newStatus = request.getParameter("new_status");
+
+            Connection conn = DBConnection.getConnection();
+            String query = "UPDATE reservations SET status=? WHERE res_id=?";
+            PreparedStatement pst = conn.prepareStatement(query);
+            pst.setString(1, newStatus);
+            pst.setInt(2, resId);
+            pst.executeUpdate();
+            pst.close();
+            conn.close();
+
+            response.sendRedirect("reservation-details.jsp?id=" + resId);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.sendRedirect("reservations-list.jsp?error=Error updating status");
+        }
     }
 }
