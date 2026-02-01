@@ -43,7 +43,7 @@
                                     </div>
 
                                     <div class="col-6 text-muted">Payment Status:</div>
-                                    <div class="col-6 fw-bold text-end text-warning">Pending Payment</div>
+                                    <div class="col-6 fw-bold text-end text-warning">Unpaid</div>
                                 </div>
                             </div>
 
