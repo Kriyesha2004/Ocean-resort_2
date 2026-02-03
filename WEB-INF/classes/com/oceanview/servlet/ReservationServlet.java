@@ -78,10 +78,12 @@ public class ReservationServlet extends HttpServlet {
                 return;
             }
 
-            // NEW: Check Availability
+            // NEW: Check Availability AND Allocation
             ReservationService resService = new ReservationService();
-            if (!resService.isRoomAvailable(roomType, checkInDate, checkOutDate)) {
-                request.setAttribute("error", "Sorry, " + roomType + " rooms are fully booked for the selected dates.");
+            com.oceanview.model.Room allocatedRoom = resService.findAvailableRoom(roomType, checkInDate, checkOutDate);
+
+            if (allocatedRoom == null) {
+                request.setAttribute("error", "Sorry, no " + roomType + " rooms are available for the selected dates.");
                 request.getRequestDispatcher(errorPage).forward(request, response);
                 return;
             }
@@ -92,9 +94,9 @@ public class ReservationServlet extends HttpServlet {
 
             // Insert reservation into database
             Connection conn = DBConnection.getConnection();
-            String query = "INSERT INTO reservations (guest_name, address, contact_no, email, room_type, check_in, check_out, total_bill, status, created_by) "
+            String query = "INSERT INTO reservations (guest_name, address, contact_no, email, room_type, check_in, check_out, total_bill, status, created_by, room_id) "
                     +
-                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'Pending', ?)";
+                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'Pending', ?, ?)";
 
             PreparedStatement pst = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             pst.setString(1, guestName);
@@ -111,6 +113,7 @@ public class ReservationServlet extends HttpServlet {
             } else {
                 pst.setNull(9, java.sql.Types.INTEGER);
             }
+            pst.setInt(10, allocatedRoom.getRoomId());
 
             int affectedRows = pst.executeUpdate();
 
