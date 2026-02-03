@@ -43,9 +43,8 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <% try { Class.forName("com.mysql.cj.jdbc.Driver"); Connection
-                                                        conn=DriverManager.getConnection("jdbc:mysql://localhost:3306/ocean_view_db", "root"
-                                                        , "password" ); String query="SELECT DATE(check_in) as date, "
+                                                    <% try { Connection conn=getDBConnection(); String
+                                                        query="SELECT DATE(check_in) as date, "
                                                         + "SUM(CASE WHEN room_type='Single' AND status='Checked-In' THEN 1 ELSE 0 END) as single_rooms, "
                                                         + "SUM(CASE WHEN room_type='Double' AND status='Checked-In' THEN 1 ELSE 0 END) as double_rooms, "
                                                         + "SUM(CASE WHEN room_type='Luxury' AND status='Checked-In' THEN 1 ELSE 0 END) as luxury_rooms "
@@ -78,17 +77,18 @@
                                                             <td>
                                                                 <div class="progress" style="height: 20px;">
                                                                     <div class="progress-bar" role="progressbar"
-                                                                        style="width: <%= (total * 100 / 30) %>%">
+                                                                        style="<%= " width: " + (total * 100 / 30) + "
+                                                                        %" %>">
                                                                         <%= (total * 100 / 30) %>%
                                                                     </div>
                                                                 </div>
                                                             </td>
                                                         </tr>
                                                         <% } rs.close(); pst.close(); conn.close(); } catch (Exception
-                                                            e) { out.println("<tr>
-                                                            <td colspan='6' class='text-danger text-center'>Error
-                                                                loading report: " + e.getMessage() + "</td>
-                                                            </tr>");
+                                                            e) { out.println("<tr>" +
+                                                            "<td colspan='6' class='text-danger text-center'>Error
+                                                                loading report: " + e.getMessage() + "</td>" +
+                                                            "</tr>");
                                                             }
                                                             %>
                                                 </tbody>
@@ -121,9 +121,7 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <% try { Class.forName("com.mysql.cj.jdbc.Driver"); Connection
-                                                        conn=DriverManager.getConnection("jdbc:mysql://localhost:3306/ocean_view_db", "root"
-                                                        , "password" ); String
+                                                    <% try { Connection conn=getDBConnection(); String
                                                         query="SELECT DATE_FORMAT(created_at, '%Y-%m') as month, "
                                                         + "COUNT(*) as total_reservations, "
                                                         + "SUM(total_bill) as total_revenue, "
@@ -147,10 +145,10 @@
                                                             </td>
                                                         </tr>
                                                         <% } rs.close(); pst.close(); conn.close(); } catch (Exception
-                                                            e) { out.println("<tr>
-                                                            <td colspan='4' class='text-danger text-center'>Error
-                                                                loading revenue data: " + e.getMessage() + "</td>
-                                                            </tr>");
+                                                            e) { out.println("<tr>" +
+                                                            "<td colspan='4' class='text-danger text-center'>Error
+                                                                loading revenue data: " + e.getMessage() + "</td>" +
+                                                            "</tr>");
                                                             }
                                                             %>
                                                 </tbody>
@@ -166,3 +164,7 @@
             </body>
 
             </html>
+
+            <%! // Helper method to get database connection // This removes duplication of connection logic private
+                Connection getDBConnection() throws Exception { Class.forName("com.mysql.cj.jdbc.Driver"); return
+                DriverManager.getConnection("jdbc:mysql://localhost:3306/ocean_view_db", "root" , "" ); } %>

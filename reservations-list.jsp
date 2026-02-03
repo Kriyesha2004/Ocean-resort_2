@@ -38,6 +38,7 @@
                                                     <th>Res. ID</th>
                                                     <th>Guest Name</th>
                                                     <th>Room Type</th>
+                                                    <th>Room No</th>
                                                     <th>Check-In</th>
                                                     <th>Check-Out</th>
                                                     <th>Total Bill</th>
@@ -47,7 +48,8 @@
                                             </thead>
                                             <tbody>
                                                 <% try { Connection conn=DBConnection.getConnection(); String
-                                                    query="SELECT res_id, guest_name, room_type, check_in, check_out, total_bill, status FROM reservations ORDER BY created_at DESC"
+                                                    query="SELECT r.res_id, r.guest_name, r.room_type, r.check_in, r.check_out, r.total_bill, r.status, rm.room_number "
+                                                    + "FROM reservations r LEFT JOIN rooms rm ON r.room_id = rm.room_id ORDER BY r.created_at DESC"
                                                     ; PreparedStatement pst=conn.prepareStatement(query); ResultSet
                                                     rs=pst.executeQuery(); while (rs.next()) { int
                                                     resId=rs.getInt("res_id"); String
@@ -56,10 +58,12 @@
                                                     checkIn=rs.getString("check_in"); String
                                                     checkOut=rs.getString("check_out"); double
                                                     bill=rs.getDouble("total_bill"); String
-                                                    status=rs.getString("status"); String statusBadge="secondary" ; if
-                                                    ("Confirmed".equals(status)) statusBadge="success" ; else if
-                                                    ("Checked-In".equals(status)) statusBadge="info" ; else if
-                                                    ("Cancelled".equals(status)) statusBadge="danger" ; %>
+                                                    roomNumber=rs.getString("room_number"); if(roomNumber==null)
+                                                    roomNumber="-" ; String status=rs.getString("status"); String
+                                                    statusBadge="secondary" ; if ("Confirmed".equals(status))
+                                                    statusBadge="success" ; else if ("Checked-In".equals(status))
+                                                    statusBadge="info" ; else if ("Cancelled".equals(status))
+                                                    statusBadge="danger" ; %>
                                                     <tr>
                                                         <td><strong>#<%= resId %></strong></td>
                                                         <td>
@@ -67,6 +71,11 @@
                                                         </td>
                                                         <td>
                                                             <%= roomType %>
+                                                        </td>
+                                                        <td>
+                                                            <span class="badge bg-dark">
+                                                                <%= roomNumber %>
+                                                            </span>
                                                         </td>
                                                         <td>
                                                             <%= checkIn %>
