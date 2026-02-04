@@ -154,13 +154,112 @@ const ReportsDashboard = () => {
 
     }, [filteredBookings, sqFilters]); // Re-render charts when filtered data changes
 
-    // -- 4. Excel Export --
     const exportToExcel = () => {
         const ws = XLSX.utils.json_to_sheet(filteredBookings);
         const wb = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws, "Filtered_Bookings");
-        XLSX.writeFile(wb, 'Report_Export.xlsx');
+        XLSX.utils.book_append_sheet(wb, ws, "Reports");
+        XLSX.writeFile(wb, `Reports_${sqFilters.year}_${sqFilters.month}.xlsx`);
     };
+
+    const exportToWord = async () => {
+        const { Document, Packer, Paragraph, TextRun, ImageRun, Table, TableRow, TableCell, WidthType, HeadingLevel, AlignmentType } = docx;
+
+        // 1. Capture Charts
+        const revenueChartUrl = revenueChartRef.current.toDataURL();
+        const roomChartUrl = roomTypeChartRef.current.toDataURL();
+
+        // 2. Create Table Rows
+        const tableRows = filteredBookings.map(b => (
+            new TableRow({
+                children: [
+                    new TableCell({ children: [new Paragraph(b.id.toString())] }),
+                    new TableCell({ children: [new Paragraph(b.guestName)] }),
+                    new TableCell({ children: [new Paragraph(b.roomType)] }),
+                    new TableCell({ children: [new Paragraph(b.checkIn)] }),
+                    new TableCell({ children: [new Paragraph(b.status)] }),
+                    new TableCell({ children: [new Paragraph("$" + b.totalBill.toFixed(2))] }),
+                ],
+            })
+        ));
+
+        // Add Header Row
+        tableRows.unshift(new TableRow({
+            children: [
+                new TableCell({ children: [new Paragraph({ text: "ID", bold: true })] }),
+                new TableCell({ children: [new Paragraph({ text: "Guest", bold: true })] }),
+                new TableCell({ children: [new Paragraph({ text: "Room", bold: true })] }),
+                new TableCell({ children: [new Paragraph({ text: "Check-In", bold: true })] }),
+                new TableCell({ children: [new Paragraph({ text: "Status", bold: true })] }),
+                new TableCell({ children: [new Paragraph({ text: "Bill", bold: true })] }),
+            ],
+            tableHeader: true,
+        }));
+
+        // 3. Create Document
+        const doc = new Document({
+            sections: [{
+                properties: {},
+                children: [
+                    new Paragraph({
+                        text: "Ocean View Resort - Reports",
+                        heading: HeadingLevel.HEADING_1,
+                        alignment: AlignmentType.CENTER,
+                    }),
+                    new Paragraph({
+                        text: `Scope: Year ${sqFilters.year}, Month: ${sqFilters.month === 'all' ? 'All' : sqFilters.month}`,
+                        alignment: AlignmentType.CENTER,
+                    }),
+                    new Paragraph({ text: "" }), // Spacer
+
+                    // Stats
+                    new Paragraph({
+                        children: [
+                            new TextRun({ text: `Total Bookings: ${dynamicStats.count}`, bold: true, break: 1 }),
+                            new TextRun({ text: `Total Revenue: $${dynamicStats.revenue.toFixed(2)}`, bold: true, break: 1 }),
+                            new TextRun({ text: `Checked-In: ${dynamicStats.checkedIn}`, bold: true, break: 1 }),
+                        ]
+                    }),
+                    new Paragraph({ text: "" }), // Spacer
+
+                    // Charts
+                    new Paragraph({
+                        children: [
+                            new ImageRun({
+                                data: revenueChartUrl,
+                                transformation: { width: 500, height: 300 },
+                            }),
+                        ],
+                        alignment: AlignmentType.CENTER,
+                    }),
+                    new Paragraph({ text: "" }), // Spacer
+                    new Paragraph({
+                        children: [
+                            new ImageRun({
+                                data: roomChartUrl,
+                                transformation: { width: 300, height: 300 },
+                            }),
+                        ],
+                        alignment: AlignmentType.CENTER,
+                    }),
+                    new Paragraph({ text: "" }), // Spacer
+
+                    // Table
+                    new Paragraph({ text: "Booking Details", heading: HeadingLevel.HEADING_2 }),
+                    new Table({
+                        rows: tableRows,
+                        width: { size: 100, type: WidthType.PERCENTAGE },
+                    }),
+                ],
+            }],
+        });
+
+        // 4. Save
+        Packer.toBlob(doc).then(blob => {
+            saveAs(blob, `Reports_${sqFilters.year}_${sqFilters.month}.docx`);
+        });
+    };
+
+
 
     return (
         <div>
@@ -197,6 +296,14 @@ const ReportsDashboard = () => {
                                     <option key={i + 1} value={i + 1}>{new Date(0, i).toLocaleString('default', { month: 'long' })}</option>
                                 ))}
                             </select>
+                        </div>
+                        <div className="d-flex align-items-end gap-2">
+                            <button className="btn btn-success btn-sm" onClick={exportToExcel}>
+                                <i className="bi bi-file-earmark-excel"></i> Export Table
+                            </button>
+                            <button className="btn btn-primary btn-sm" onClick={exportToWord}>
+                                <i className="bi bi-file-word"></i> Export Word
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -252,100 +359,7 @@ const ReportsDashboard = () => {
                 </div>
             </div>
 
-            {/* Detailed Table Section */}
-            <div className="card shadow-sm">
-                <div className="card-header bg-white py-3">
-                    <div className="d-flex justify-content-between align-items-center mb-3">
-                        <h5 className="mb-0">Booking Details</h5>
-                        <button className="btn btn-success btn-sm" onClick={exportToExcel}>
-                            <i className="bi bi-file-earmark-excel"></i> Export Table
-                        </button>
-                    </div>
 
-                    {/* Client Filters Bar */}
-                    <div className="row g-2">
-                        <div className="col-md-4">
-                            <input type="text" className="form-control" placeholder="Search Guest Name or ID..."
-                                value={clientFilters.search}
-                                onChange={e => setClientFilters({ ...clientFilters, search: e.target.value })} />
-                        </div>
-                        <div className="col-md-3">
-                            <select className="form-select" value={clientFilters.roomType}
-                                onChange={e => setClientFilters({ ...clientFilters, roomType: e.target.value })}>
-                                <option value="all">All Room Types</option>
-                                <option value="Standard Room">Standard Room</option>
-                                <option value="Deluxe Room">Deluxe Room</option>
-                                <option value="Suite">Suite</option>
-                                <option value="Ocean View">Ocean View</option>
-                            </select>
-                        </div>
-                        <div className="col-md-3">
-                            <select className="form-select" value={clientFilters.status}
-                                onChange={e => setClientFilters({ ...clientFilters, status: e.target.value })}>
-                                <option value="all">All Statuses</option>
-                                <option value="Pending">Pending</option>
-                                <option value="Checked-In">Checked-In</option>
-                                <option value="Cancelled">Cancelled</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="table-responsive">
-                    <table className="table table-hover align-middle mb-0">
-                        <thead className="table-light">
-                            <tr>
-                                <th>ID</th>
-                                <th>Guest Name</th>
-                                <th>Room Type</th>
-                                <th>Check In</th>
-                                <th>Check Out</th>
-                                <th>Status</th>
-                                <th className="text-end">Total Bill</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {loading ? (
-                                <tr>
-                                    <td colSpan="7" className="text-center py-5">
-                                        <div className="spinner-border text-primary" role="status"></div>
-                                        <p className="mt-2 text-muted">Loading data...</p>
-                                    </td>
-                                </tr>
-                            ) : filteredBookings.length > 0 ? (
-                                filteredBookings.map(b => (
-                                    <tr key={b.id}>
-                                        <td><span className="badge bg-light text-dark border">#{b.id}</span></td>
-                                        <td className="fw-bold">{b.guestName}</td>
-                                        <td>{b.roomType}</td>
-                                        <td>{b.checkIn}</td>
-                                        <td>{b.checkOut}</td>
-                                        <td>
-                                            <span className={'badge ' + (
-                                                b.status === 'Checked-In' ? 'bg-success' :
-                                                    b.status === 'Pending' ? 'bg-warning' : 'bg-secondary'
-                                            )}>
-                                                {b.status}
-                                            </span>
-                                        </td>
-                                        <td className="text-end fw-bold text-success">${b.totalBill.toFixed(2)}</td>
-                                    </tr>
-                                ))
-                            ) : (
-                                <tr>
-                                    <td colSpan="7" className="text-center py-5 text-muted">
-                                        <i className="bi bi-inbox fs-1 d-block mb-2"></i>
-                                        No bookings found matching your filters.
-                                    </td>
-                                </tr>
-                            )}
-                        </tbody>
-                    </table>
-                </div>
-                <div className="card-footer bg-light text-muted small">
-                    Showing {filteredBookings.length} of {bookings.length} records
-                </div>
-            </div>
         </div>
     );
 };

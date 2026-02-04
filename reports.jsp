@@ -22,6 +22,10 @@
 
             <!-- SheetJS -->
             <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+
+            <!-- Docx & FileSaver -->
+            <script src="https://unpkg.com/docx@7.1.0/build/index.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
         </head>
 
         <body>
