@@ -143,6 +143,21 @@
                 border-top: 1px solid #eee;
                 border-bottom: 1px solid #eee;
             }
+
+            .room-img-wrapper .overlay {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.3);
+                opacity: 0;
+                transition: 0.3s;
+            }
+
+            .room-img-wrapper:hover .overlay {
+                opacity: 1;
+            }
         </style>
     </head>
 
@@ -190,8 +205,37 @@
             </div>
         </section>
 
+        <!-- About Us Section -->
+        <section class="py-5">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-6 mb-4 mb-lg-0">
+                        <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                            alt="About Ocean View Resort" class="img-fluid rounded shadow-lg">
+                    </div>
+                    <div class="col-lg-6 pl-lg-5">
+                        <h2 class="display-5 fw-bold text-dark mb-4">About Us</h2>
+                        <h4 class="text-primary mb-3">A Tradition of Luxury and Hospitality</h4>
+                        <p class="lead text-muted mb-4">
+                            Founded in 2024, Ocean View Resort has established itself as the premier
+                            destination for travelers seeking an escape from the ordinary. Nestled on
+                            the pristine shores of Tropical Island, we offer more than just a place to
+                            stay—we offer an experience.
+                        </p>
+                        <p class="text-secondary mb-4">
+                            Our dedicated team of professionals is committed to ensuring every moment of
+                            your stay is perfect. From our world-class culinary experiences to our
+                            rejuvenating spa treatments, every detail is curated for your relaxation and
+                            enjoyment.
+                        </p>
+                        <a href="#contact" class="btn btn-outline-dark rounded-pill px-4">Contact Us</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- Rooms Section -->
-        <section id="rooms" class="py-5">
+        <section id="rooms" class="py-5 bg-light">
             <div class="container">
                 <div class="text-center mb-5">
                     <h2 class="display-5 fw-bold text-dark">Our Accommodations</h2>
@@ -202,11 +246,19 @@
                 <div class="row g-4">
                     <!-- Single Room -->
                     <div class="col-lg-4 col-md-6">
-                        <div class="card room-card h-100">
-                            <div class="room-img-wrapper">
+                        <div class="card room-card h-100" data-room-type="Single" data-price="5,000"
+                            data-description="Perfect for solo travelers or business trips. Enjoy a cozy atmosphere with all modern amenities and a beautiful garden view. Features a comfortable single bed, workspace, and en-suite bathroom."
+                            data-capacity="1" data-check-in="14:00" data-check-out="11:00"
+                            data-image-url="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80">
+
+                            <div class="room-img-wrapper" style="cursor: pointer;">
                                 <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
                                     alt="Single Room">
                                 <div class="price-badge">$5,000 / night</div>
+                                <div class="overlay d-flex align-items-center justify-content-center">
+                                    <span class="btn btn-light rounded-pill"><i class="bi bi-eye"></i> View
+                                        Details</span>
+                                </div>
                             </div>
                             <div class="card-body d-flex flex-column">
                                 <h3 class="card-title h4">Single Room</h3>
@@ -218,8 +270,7 @@
                                     <i class="bi bi-star"></i>
                                 </div>
                                 <p class="card-text text-muted flex-grow-1">Perfect for solo travelers or business
-                                    trips. Enjoy a cozy atmosphere with all modern amenities and a beautiful garden
-                                    view.</p>
+                                    trips. Enjoy a cozy atmosphere...</p>
                                 <ul
                                     class="list-unstyled text-secondary mb-4 list-group list-group-flush list-group-horizontal-sm flex-wrap">
                                     <li class="me-3 mb-2"><i class="bi bi-wifi me-1"></i> Free Wifi</li>
@@ -234,13 +285,23 @@
 
                     <!-- Double Room -->
                     <div class="col-lg-4 col-md-6">
-                        <div class="card room-card h-100 border-primary border-2">
+                        <div class="card room-card h-100 border-primary border-2" data-room-type="Double"
+                            data-price="8,500"
+                            data-description="Ideal for couples or friends. Spacious room with a king-size bed, private balcony, and stunning ocean views. Includes a mini-bar and premium toiletries."
+                            data-capacity="2" data-check-in="14:00" data-check-out="11:00"
+                            data-image-url="https://images.unsplash.com/photo-1590490360182-f33efe80a713?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80">
+
                             <div class="position-absolute top-0 start-50 translate-middle badge rounded-pill bg-primary px-3 py-2 shadow"
                                 style="z-index: 2;">POPULAR</div>
-                            <div class="room-img-wrapper">
+                            <div class="room-img-wrapper" style="cursor: pointer;">
                                 <img src="https://images.unsplash.com/photo-1590490360182-f33efe80a713?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
                                     alt="Double Room">
                                 <div class="price-badge">$8,500 / night</div>
+                                <div class="overlay d-flex align-items-center justify-content-center"
+                                    style="position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.3); opacity:0; transition:0.3s;">
+                                    <span class="btn btn-light rounded-pill"><i class="bi bi-eye"></i> View
+                                        Details</span>
+                                </div>
                             </div>
                             <div class="card-body d-flex flex-column">
                                 <h3 class="card-title h4">Double Room</h3>
@@ -252,7 +313,7 @@
                                     <i class="bi bi-star-half"></i>
                                 </div>
                                 <p class="card-text text-muted flex-grow-1">Ideal for couples or friends. Spacious room
-                                    with a king-size bed, private balcony, and stunning ocean views.</p>
+                                    with a king-size bed...</p>
                                 <ul
                                     class="list-unstyled text-secondary mb-4 list-group list-group-flush list-group-horizontal-sm flex-wrap">
                                     <li class="me-3 mb-2"><i class="bi bi-wifi me-1"></i> Free Wifi</li>
@@ -267,11 +328,20 @@
 
                     <!-- Luxury Suite -->
                     <div class="col-lg-4 col-md-6">
-                        <div class="card room-card h-100">
-                            <div class="room-img-wrapper">
+                        <div class="card room-card h-100" data-room-type="Luxury" data-price="15,000"
+                            data-description="The ultimate experience. Expansive suite with separate living area, jacuzzi, and premium concierge service. Enjoy panoramic views and exclusive access to the VIP lounge."
+                            data-capacity="4" data-check-in="13:00" data-check-out="12:00"
+                            data-image-url="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80">
+
+                            <div class="room-img-wrapper" style="cursor: pointer;">
                                 <img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
                                     alt="Luxury Suite">
                                 <div class="price-badge">$15,000 / night</div>
+                                <div class="overlay d-flex align-items-center justify-content-center"
+                                    style="position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.3); opacity:0; transition:0.3s;">
+                                    <span class="btn btn-light rounded-pill"><i class="bi bi-eye"></i> View
+                                        Details</span>
+                                </div>
                             </div>
                             <div class="card-body d-flex flex-column">
                                 <h3 class="card-title h4">Luxury Suite</h3>
@@ -282,8 +352,8 @@
                                     <i class="bi bi-star-fill"></i>
                                     <i class="bi bi-star-fill"></i>
                                 </div>
-                                <p class="card-text text-muted flex-grow-1">The ultimate experience. expansive suite
-                                    with separate living area, jacuzzi, and premium concierge service.</p>
+                                <p class="card-text text-muted flex-grow-1">The ultimate experience. Expansive suite
+                                    with separate living area...</p>
                                 <ul
                                     class="list-unstyled text-secondary mb-4 list-group list-group-flush list-group-horizontal-sm flex-wrap">
                                     <li class="me-3 mb-2"><i class="bi bi-check-circle-fill text-primary me-1"></i> All
@@ -346,8 +416,36 @@
             </div>
         </footer>
 
+        <!-- Room Details Modal -->
+        <div class="modal fade" id="roomDetailsModal" tabindex="-1" aria-labelledby="roomModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header border-0">
+                        <h5 class="modal-title display-6" id="roomModalLabel">Room Details</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body p-0">
+                        <!-- Modal Hero Image -->
+                        <div class="position-relative" style="height: 400px;">
+                            <img src="" id="modalMainImage" class="w-100 h-100 object-fit-cover" alt="Room View">
+                        </div>
+
+                        <div class="p-4 p-lg-5" id="roomModalBodyContent">
+                            <!-- Content injected via JS -->
+                        </div>
+                    </div>
+                    <div class="modal-footer border-0 p-4">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <a href="#" id="modalBookBtn" class="btn btn-primary px-5">Book This Room</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Bootstrap JS -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Custom JS for Modal -->
+        <script src="js/home.js"></script>
     </body>
 
     </html>
