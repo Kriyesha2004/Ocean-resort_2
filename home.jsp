@@ -16,148 +16,7 @@
             rel="stylesheet">
         <link rel="stylesheet" href="css/style.css">
         <style>
-            :root {
-                --primary-color: #0d6efd;
-                --accent-color: #e6b800;
-            }
-
-            body {
-                font-family: 'Lato', sans-serif;
-                padding-top: 0 !important;
-                /* Override any padding if exists */
-            }
-
-            h1,
-            h2,
-            h3,
-            h4,
-            h5 {
-                font-family: 'Playfair Display', serif;
-            }
-
-            /* Hero Section */
-            .hero-section {
-                background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-                    url('https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
-                background-size: cover;
-                background-position: center;
-                height: 85vh;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                color: white;
-                text-align: center;
-                position: relative;
-            }
-
-            .hero-content h1 {
-                font-size: 3.5rem;
-                margin-bottom: 20px;
-                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-            }
-
-            .hero-content p {
-                font-size: 1.25rem;
-                margin-bottom: 30px;
-                max-width: 700px;
-                margin-left: auto;
-                margin-right: auto;
-            }
-
-            /* Room Cards */
-            .room-card {
-                transition: transform 0.3s ease, box-shadow 0.3s ease;
-                height: 100%;
-                overflow: hidden;
-                border: none;
-                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            }
-
-            .room-card:hover {
-                transform: translateY(-5px);
-                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-            }
-
-            .room-img-wrapper {
-                height: 250px;
-                overflow: hidden;
-                position: relative;
-            }
-
-            .room-img-wrapper img {
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-                transition: transform 0.5s ease;
-            }
-
-            .room-card:hover .room-img-wrapper img {
-                transform: scale(1.05);
-            }
-
-            .price-badge {
-                position: absolute;
-                top: 20px;
-                right: 0;
-                background-color: var(--primary-color);
-                color: white;
-                padding: 8px 15px;
-                font-weight: bold;
-                font-size: 1.1rem;
-                border-radius: 4px 0 0 4px;
-                box-shadow: -2px 2px 5px rgba(0, 0, 0, 0.2);
-            }
-
-            /* Features */
-            .feature-icon {
-                font-size: 2.5rem;
-                color: var(--primary-color);
-                margin-bottom: 15px;
-            }
-
-            /* Footer */
-            .footer {
-                background-color: #212529;
-                color: rgba(255, 255, 255, 0.7);
-                padding: 60px 0 30px;
-            }
-
-            .footer h5 {
-                color: white;
-                margin-bottom: 20px;
-            }
-
-            .footer a {
-                color: rgba(255, 255, 255, 0.7);
-                text-decoration: none;
-                transition: color 0.3s;
-            }
-
-            .footer a:hover {
-                color: white;
-            }
-
-            /* Booking Date Widget in Room Cards */
-            .card-dates {
-                background-color: #f8f9fa;
-                border-top: 1px solid #eee;
-                border-bottom: 1px solid #eee;
-            }
-
-            .room-img-wrapper .overlay {
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: rgba(0, 0, 0, 0.3);
-                opacity: 0;
-                transition: 0.3s;
-            }
-
-            .room-img-wrapper:hover .overlay {
-                opacity: 1;
-            }
+            /* Minimal overrides that might be needed, currently empty as we moved to style.css */
         </style>
     </head>
 
@@ -177,27 +36,27 @@
         </header>
 
         <!-- Features Section -->
-        <section class="py-5 bg-light">
+        <section class="py-5">
             <div class="container text-center">
                 <div class="row g-4">
                     <div class="col-md-4">
                         <div class="p-3">
                             <i class="bi bi-umbrella feature-icon"></i>
-                            <h4>Private Beaches</h4>
+                            <h4 class="mt-4">Private Beaches</h4>
                             <p>Enjoy exclusive access to our pristine white sandy beaches and crystal clear waters.</p>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="p-3">
                             <i class="bi bi-cup-hot feature-icon"></i>
-                            <h4>Gourmet Dining</h4>
+                            <h4 class="mt-4">Gourmet Dining</h4>
                             <p>Savor world-class cuisine at our award-winning restaurants and seaside bars.</p>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="p-3">
                             <i class="bi bi-stars feature-icon"></i>
-                            <h4>World-Class Spa</h4>
+                            <h4 class="mt-4">World-Class Spa</h4>
                             <p>Rejuvenate your body and mind with our premium spa treatments and wellness centers.</p>
                         </div>
                     </div>
@@ -211,10 +70,11 @@
                 <div class="row align-items-center">
                     <div class="col-lg-6 mb-4 mb-lg-0">
                         <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-                            alt="About Ocean View Resort" class="img-fluid rounded shadow-lg">
+                            alt="About Ocean View Resort" class="img-fluid rounded shadow-lg"
+                            style="border: 2px solid var(--glass-border);">
                     </div>
                     <div class="col-lg-6 pl-lg-5">
-                        <h2 class="display-5 fw-bold text-dark mb-4">About Us</h2>
+                        <h2 class="display-5 fw-bold mb-4">About Us</h2>
                         <h4 class="text-primary mb-3">A Tradition of Luxury and Hospitality</h4>
                         <p class="lead text-muted mb-4">
                             Founded in 2024, Ocean View Resort has established itself as the premier
@@ -228,17 +88,17 @@
                             rejuvenating spa treatments, every detail is curated for your relaxation and
                             enjoyment.
                         </p>
-                        <a href="#contact" class="btn btn-outline-dark rounded-pill px-4">Contact Us</a>
+                        <a href="#contact" class="btn btn-outline-primary rounded-pill px-4">Contact Us</a>
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- Rooms Section -->
-        <section id="rooms" class="py-5 bg-light">
+        <section id="rooms" class="py-5">
             <div class="container">
                 <div class="text-center mb-5">
-                    <h2 class="display-5 fw-bold text-dark">Our Accommodations</h2>
+                    <h2 class="display-5 fw-bold">Our Accommodations</h2>
                     <div class="mx-auto bg-primary" style="height: 3px; width: 100px;"></div>
                     <p class="mt-3 text-muted">Choose the perfect space for your relaxation</p>
                 </div>

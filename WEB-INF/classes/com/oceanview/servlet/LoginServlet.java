@@ -2,6 +2,8 @@ package com.oceanview.servlet;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
+import com.oceanview.dao.UserDAO;
+import com.oceanview.model.User;
 import javax.servlet.annotation.WebServlet;
 import java.io.*;
 
@@ -29,12 +31,41 @@ public class LoginServlet extends HttpServlet {
             return;
         }
 
-        // Hardcoded credentials for testing
+        UserDAO userDAO = new UserDAO();
+        User user = null;
+
+        // First check hardcoded admin (legacy support or bootstrap)
         if ("admin".equals(username) && "admin123".equals(password)) {
+            // Try to fetch admin from DB to get settings, if exists
+            user = userDAO.getUserByUsername("admin");
+            if (user == null) {
+                // Fallback if admin not in DB yet (though SQL script adds it)
+                user = new User();
+                user.setUserId(1);
+                user.setUsername("admin");
+                user.setFullName("Administrator");
+                user.setDarkMode(false); // defaults
+                user.setEmailNotif(true);
+            }
+        } else {
+            // Try to authenticate against DB
+            User dbUser = userDAO.getUserByUsername(username);
+            if (dbUser != null && dbUser.getPassword().equals(password)) {
+                user = dbUser;
+            }
+        }
+
+        if (user != null) {
             HttpSession session = request.getSession();
-            session.setAttribute("user_id", 1);
-            session.setAttribute("username", username);
-            session.setAttribute("full_name", "Administrator");
+            session.setAttribute("user_id", user.getUserId());
+            session.setAttribute("username", user.getUsername());
+            session.setAttribute("full_name", user.getFullName());
+
+            // Set settings in session
+            session.setAttribute("is_dark_mode", user.isDarkMode());
+            session.setAttribute("is_email_notif", user.isEmailNotif());
+            session.setAttribute("is_browser_notif", user.isBrowserNotif());
+
             session.setMaxInactiveInterval(30 * 60);
 
             response.sendRedirect(request.getContextPath() + "/dashboard.jsp");
