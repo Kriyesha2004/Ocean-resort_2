@@ -149,12 +149,12 @@
                             data-price="8,500"
                             data-description="Ideal for couples or friends. Spacious room with a king-size bed, private balcony, and stunning ocean views. Includes a mini-bar and premium toiletries."
                             data-capacity="2" data-check-in="14:00" data-check-out="11:00"
-                            data-image-url="https://images.unsplash.com/photo-1590490360182-f33efe80a713?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80">
+                            data-image-url="https://images.unsplash.com/photo-1611892440504-42a792e24d32?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80">
 
                             <div class="position-absolute top-0 start-50 translate-middle badge rounded-pill bg-primary px-3 py-2 shadow"
                                 style="z-index: 2;">POPULAR</div>
                             <div class="room-img-wrapper" style="cursor: pointer;">
-                                <img src="https://images.unsplash.com/photo-1590490360182-f33efe80a713?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                                <img src="https://images.unsplash.com/photo-1611892440504-42a792e24d32?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
                                     alt="Double Room">
                                 <div class="price-badge">$8,500 / night</div>
                                 <div class="overlay d-flex align-items-center justify-content-center"

@@ -23,9 +23,25 @@
                                 <div class="col-md-12">
                                     <div class="d-flex justify-content-between align-items-center">
                                         <h1 class="display-6 text-primary">All Reservations</h1>
-                                        <a href="reservation.jsp" class="btn btn-primary">
-                                            <i class="bi bi-plus-circle"></i> New Reservation
-                                        </a>
+                                        <div class="d-flex gap-2">
+                                            <form action="reservations-list.jsp" method="GET" class="d-flex">
+                                                <% String search=request.getParameter("search"); String
+                                                    safeSearch=(search !=null) ? search.replace("\"", "&quot;" ) : "" ;
+                                                    %>
+                                                    <input type="text" name="search" class="form-control me-2"
+                                                        placeholder="Search guest name..." value="<%= safeSearch %>">
+                                                    <button type="submit"
+                                                        class="btn btn-outline-primary">Search</button>
+                                                    <% if(request.getParameter("search") !=null &&
+                                                        !request.getParameter("search").trim().isEmpty()) { %>
+                                                        <a href="reservations-list.jsp"
+                                                            class="btn btn-outline-secondary ms-2">Clear</a>
+                                                        <% } %>
+                                            </form>
+                                            <a href="reservation.jsp" class="btn btn-primary">
+                                                <i class="bi bi-plus-circle"></i> New Reservation
+                                            </a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -48,10 +64,15 @@
                                             </thead>
                                             <tbody>
                                                 <% try { Connection conn=DBConnection.getConnection(); String
+                                                    searchQuery=request.getParameter("search"); String
                                                     query="SELECT r.res_id, r.guest_name, r.room_type, r.check_in, r.check_out, r.total_bill, r.status, rm.room_number "
-                                                    + "FROM reservations r LEFT JOIN rooms rm ON r.room_id = rm.room_id ORDER BY r.created_at DESC"
-                                                    ; PreparedStatement pst=conn.prepareStatement(query); ResultSet
-                                                    rs=pst.executeQuery(); while (rs.next()) { int
+                                                    + "FROM reservations r LEFT JOIN rooms rm ON r.room_id = rm.room_id "
+                                                    ; if (searchQuery !=null && !searchQuery.trim().isEmpty()) { query
+                                                    +="WHERE r.guest_name LIKE ? " ; } query
+                                                    +="ORDER BY r.created_at DESC" ; PreparedStatement
+                                                    pst=conn.prepareStatement(query); if (searchQuery !=null &&
+                                                    !searchQuery.trim().isEmpty()) { pst.setString(1, "%" + searchQuery
+                                                    + "%" ); } ResultSet rs=pst.executeQuery(); while (rs.next()) { int
                                                     resId=rs.getInt("res_id"); String
                                                     guestName=rs.getString("guest_name"); String
                                                     roomType=rs.getString("room_type"); String
