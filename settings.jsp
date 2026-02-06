@@ -32,78 +32,90 @@
 
                                 <div class="card-body p-4">
 
-                                    <% String message=(String) session.getAttribute("message"); if (message !=null) { %>
+                                    <% String message=(String) session.getAttribute("message"); String error=(String)
+                                        session.getAttribute("error"); if (message !=null) { %>
                                         <div class="alert alert-success alert-dismissible fade show" role="alert">
                                             <%= message %>
                                                 <button type="button" class="btn-close" data-bs-dismiss="alert"
                                                     aria-label="Close"></button>
                                         </div>
-                                        <% session.removeAttribute("message"); } %>
+                                        <% session.removeAttribute("message"); } if (error !=null) { %>
+                                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                                <%= error %>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                                        aria-label="Close"></button>
+                                            </div>
+                                            <% session.removeAttribute("error"); } %>
 
-                                            <form action="settings" method="post" id="settingsForm">
+                                                <form action="settings" method="post" id="settingsForm">
 
-                                                <!-- Appearance Section -->
-                                                <div class="mb-4">
-                                                    <h6 class="text-uppercase text-muted small fw-bold mb-3">Appearance
-                                                    </h6>
+                                                    <!-- Appearance Section -->
+                                                    <div class="mb-4">
+                                                        <h6 class="text-uppercase text-muted small fw-bold mb-3">
+                                                            Appearance
+                                                        </h6>
 
-                                                    <div
-                                                        class="d-flex align-items-center justify-content-between p-3 bg-white border rounded mb-2">
-                                                        <div>
-                                                            <div class="fw-bold">Dark Mode</div>
-                                                            <div class="text-muted small">Reduce eye strain with a dark
-                                                                color theme</div>
-                                                        </div>
-                                                        <div class="form-check form-switch">
-                                                            <input class="form-check-input" type="checkbox"
-                                                                name="darkMode" id="darkModeSwitch"
-                                                                ${sessionScope.is_dark_mode ? 'checked' : '' }>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <!-- Notifications Section -->
-                                                <div class="mb-4">
-                                                    <h6 class="text-uppercase text-muted small fw-bold mb-3">
-                                                        Notifications</h6>
-
-                                                    <div
-                                                        class="d-flex align-items-center justify-content-between p-3 bg-white border rounded mb-2">
-                                                        <div>
-                                                            <div class="fw-bold">Email Notifications</div>
-                                                            <div class="text-muted small">Receive daily summary reports
-                                                                via email</div>
-                                                        </div>
-                                                        <div class="form-check form-switch">
-                                                            <input class="form-check-input" type="checkbox"
-                                                                name="emailNotif" id="emailNotifSwitch"
-                                                                ${sessionScope.is_email_notif ? 'checked' : '' }>
+                                                        <div
+                                                            class="d-flex align-items-center justify-content-between p-3 bg-white border rounded mb-2">
+                                                            <div>
+                                                                <div class="fw-bold">Dark Mode</div>
+                                                                <div class="text-muted small">Reduce eye strain with a
+                                                                    dark
+                                                                    color theme</div>
+                                                            </div>
+                                                            <div class="form-check form-switch">
+                                                                <input class="form-check-input" type="checkbox"
+                                                                    name="darkMode" id="darkModeSwitch"
+                                                                    ${sessionScope.is_dark_mode ? 'checked' : '' }>
+                                                            </div>
                                                         </div>
                                                     </div>
 
-                                                    <div
-                                                        class="d-flex align-items-center justify-content-between p-3 bg-white border rounded">
-                                                        <div>
-                                                            <div class="fw-bold">Browser Alerts</div>
-                                                            <div class="text-muted small">Show desktop notifications for
-                                                                new bookings</div>
+                                                    <!-- Notifications Section -->
+                                                    <div class="mb-4">
+                                                        <h6 class="text-uppercase text-muted small fw-bold mb-3">
+                                                            Notifications</h6>
+
+                                                        <div
+                                                            class="d-flex align-items-center justify-content-between p-3 bg-white border rounded mb-2">
+                                                            <div>
+                                                                <div class="fw-bold">Email Notifications</div>
+                                                                <div class="text-muted small">Receive daily summary
+                                                                    reports
+                                                                    via email</div>
+                                                            </div>
+                                                            <div class="form-check form-switch">
+                                                                <input class="form-check-input" type="checkbox"
+                                                                    name="emailNotif" id="emailNotifSwitch"
+                                                                    ${sessionScope.is_email_notif ? 'checked' : '' }>
+                                                            </div>
                                                         </div>
-                                                        <div class="form-check form-switch">
-                                                            <input class="form-check-input" type="checkbox"
-                                                                name="browserNotif" id="browserNotifSwitch"
-                                                                ${sessionScope.is_browser_notif ? 'checked' : '' }>
+
+                                                        <div
+                                                            class="d-flex align-items-center justify-content-between p-3 bg-white border rounded">
+                                                            <div>
+                                                                <div class="fw-bold">Browser Alerts</div>
+                                                                <div class="text-muted small">Show desktop notifications
+                                                                    for
+                                                                    new bookings</div>
+                                                            </div>
+                                                            <div class="form-check form-switch">
+                                                                <input class="form-check-input" type="checkbox"
+                                                                    name="browserNotif" id="browserNotifSwitch"
+                                                                    ${sessionScope.is_browser_notif ? 'checked' : '' }>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
 
-                                                <div class="d-grid gap-2">
-                                                    <button type="submit" class="btn btn-primary">
-                                                        Save Changes
-                                                    </button>
-                                                    <a href="dashboard.jsp" class="btn btn-outline-secondary">Cancel</a>
-                                                </div>
+                                                    <div class="d-grid gap-2">
+                                                        <button type="submit" class="btn btn-primary">
+                                                            Save Changes
+                                                        </button>
+                                                        <a href="dashboard.jsp"
+                                                            class="btn btn-outline-secondary">Cancel</a>
+                                                    </div>
 
-                                            </form>
+                                                </form>
                                 </div>
                             </div>
                         </div>

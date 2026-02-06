@@ -28,7 +28,12 @@
                                     <h1 class="display-6 text-primary">
                                         <i class="bi bi-speedometer2"></i> Dashboard
                                     </h1>
-                                    <p class="text-muted">Welcome, <%= session.getAttribute("full_name") %>!</p>
+                                    <p class="text-muted">Welcome, <%= session.getAttribute("full_name") %>!
+                                            <span id="notifStatus" class="badge bg-secondary" style="cursor:pointer;"
+                                                onclick="requestNotifPermission()">
+                                                <i class="bi bi-bell"></i> Checking...
+                                            </span>
+                                    </p>
                                 </div>
                             </div>
 
@@ -151,6 +156,45 @@
 
                         <script
                             src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+                        <script>
+                            document.addEventListener('DOMContentLoaded', function () {
+                                // Check if browser notifications are enabled in session settings
+                                // Note: This relies on the JSP rendering 'true' or 'false' directly into the JS code.
+                                var isBrowserNotif = '<%= session.getAttribute("is_browser_notif") %>' === 'true';
+
+                                if (isBrowserNotif) {
+                                    // Request permission immediately if we want notifications
+                                    if (Notification.permission !== "granted" && Notification.permission !== "denied") {
+                                        Notification.requestPermission();
+                                    }
+
+                                    // Poll every 10 seconds
+                                    setInterval(function () {
+                                        fetch('api/notifications')
+                                            .then(response => {
+                                                if (!response.ok) throw new Error("Network response was not ok");
+                                                return response.json();
+                                            })
+                                            .then(data => {
+                                                if (data.count > 0) {
+                                                    if (Notification.permission === "granted") {
+                                                        new Notification("New Reservation!", {
+                                                            body: data.count + " new reservation(s). Latest: " + data.latestGuest,
+                                                            icon: "https://cdn-icons-png.flaticon.com/512/2936/2936956.png" // Generic hotel icon
+                                                        });
+
+                                                        // Optional: Play a sound
+                                                        // var audio = new Audio('notification.mp3');
+                                                        // audio.play().catch(e => console.log('Audio play failed', e));
+                                                    }
+                                                }
+                                            })
+                                            .catch(error => console.error('Error polling notifications:', error));
+                                    }, 10000); // Poll every 10 seconds
+                                }
+                            });
+                        </script>
                 </body>
 
                 </html>
