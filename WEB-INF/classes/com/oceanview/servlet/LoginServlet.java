@@ -46,6 +46,7 @@ public class LoginServlet extends HttpServlet {
                 user.setFullName("Administrator");
                 user.setDarkMode(false); // defaults
                 user.setEmailNotif(true);
+                user.setBrowserNotif(true);
             }
         } else {
             // Try to authenticate against DB
