@@ -157,45 +157,8 @@
                         <script
                             src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-
                         <script>
-                            function updateNotifBadge() {
-                                var badge = document.getElementById("notifStatus");
-                                if ("Notification" in window) {
-                                    if (Notification.permission === "granted") {
-                                        badge.className = "badge bg-success";
-                                        badge.innerHTML = '<i class="bi bi-bell-fill"></i> Calls Active';
-                                    } else if (Notification.permission === "denied") {
-                                        badge.className = "badge bg-danger";
-                                        badge.innerHTML = '<i class="bi bi-bell-slash"></i> Blocked';
-                                    } else {
-                                        badge.className = "badge bg-secondary";
-                                        badge.innerHTML = '<i class="bi bi-bell"></i> Enable Alert';
-                                    }
-                                } else {
-                                    badge.style.display = 'none';
-                                }
-                            }
-
-                            function requestNotifPermission() {
-                                if (!("Notification" in window)) {
-                                    alert("This browser does not support desktop notification");
-                                } else if (Notification.permission !== "denied") {
-                                    Notification.requestPermission().then(function (permission) {
-                                        updateNotifBadge();
-                                        if (permission === "granted") {
-                                            new Notification("Notifications Enabled", {
-                                                body: "You will now receive alerts for new reservations.",
-                                                icon: "img/logo.png"
-                                            });
-                                        }
-                                    });
-                                }
-                            }
-
                             document.addEventListener('DOMContentLoaded', function () {
-                                updateNotifBadge();
-
                                 // Check if browser notifications are enabled in session settings
                                 // Note: This relies on the JSP rendering 'true' or 'false' directly into the JS code.
                                 var isBrowserNotif = '<%= session.getAttribute("is_browser_notif") %>' === 'true';
@@ -215,11 +178,6 @@
                                             })
                                             .then(data => {
                                                 if (data.count > 0) {
-                                                    // Show In-App Toast
-                                                    const toastLiveExample = document.getElementById('liveToast');
-                                                    const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample);
-                                                    document.getElementById('toastBody').innerText = data.count + " new reservation(s). Latest: " + data.latestGuest;
-                                                    toastBootstrap.show();
                                                     if (Notification.permission === "granted") {
                                                         new Notification("New Reservation!", {
                                                             body: data.count + " new reservation(s). Latest: " + data.latestGuest,
@@ -237,22 +195,6 @@
                                 }
                             });
                         </script>
-                        <!-- Toast Container for Real-time Alerts -->
-                        <div class="toast-container position-fixed bottom-0 end-0 p-3">
-                            <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-                                <div class="toast-header bg-primary text-white">
-                                    <i class="bi bi-bell-fill me-2"></i>
-                                    <strong class="me-auto">New Reservation!</strong>
-                                    <small>Just now</small>
-                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"
-                                        aria-label="Close"></button>
-                                </div>
-                                <div class="toast-body" id="toastBody">
-                                    New reservation received.
-                                </div>
-                            </div>
-                        </div>
-
                 </body>
 
                 </html>
