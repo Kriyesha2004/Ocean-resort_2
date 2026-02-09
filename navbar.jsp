@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
     <% if (session.getAttribute("user_id")==null) { response.sendRedirect("index.jsp"); return; } %>
-        <nav class="navbar navbar-expand-lg navbar-custom sticky-top">
+        <nav class="navbar navbar-expand-lg navbar-dark navbar-custom sticky-top">
             <div class="container-fluid">
                 <a class="navbar-brand fw-bold fs-3" href="dashboard.jsp">
                     <i class="bi bi-tsunami"></i> Ocean View

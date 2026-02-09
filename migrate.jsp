@@ -55,8 +55,8 @@
                         rsRooms.next();
                         if (rsRooms.getInt(1) == 0) {
                             out.println("Seeding initial rooms...");
-                            // Single Rooms (101-110)
-                            for(int i=101; i<=110; i++) {
+                            // Single Rooms (101-105)
+                            for(int i=101; i<=105; i++) {
                                 stmt.addBatch("INSERT INTO rooms (room_number, room_type) VALUES ('"+i+"', 'Single')");
                             }
                             // Double Rooms (201-208)

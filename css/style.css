@@ -266,3 +266,134 @@ body:not(.dark-mode) .btn-primary:hover {
     border: 1px solid var(--border-color);
     box-shadow: var(--glass-shadow);
 }
+
+/* =========================================
+   Mobile Responsiveness (Media Queries)
+   ========================================= */
+
+@media (max-width: 991.98px) {
+    /* Tablet & Mobile Adjustments */
+
+    .hero-section {
+        height: auto;
+        min-height: 70vh;
+        padding: 4rem 0;
+    }
+
+    .display-3 {
+        font-size: 2.5rem;
+        /* Smaller hero title */
+    }
+
+    .navbar-custom .navbar-collapse {
+        background: var(--bg-nav);
+        padding: 1rem;
+        border-radius: 0 0 15px 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        margin-top: 10px;
+    }
+}
+
+@media (max-width: 767.98px) {
+    /* Mobile Landscape & Portrait */
+
+    body {
+        font-size: 15px;
+        /* Slightly smaller body text */
+    }
+
+    /* Typography Scaling */
+    h1 {
+        font-size: 2rem;
+    }
+
+    h2 {
+        font-size: 1.75rem;
+    }
+
+    h3 {
+        font-size: 1.5rem;
+    }
+
+    .display-5 {
+        font-size: 2rem;
+    }
+
+    .display-6 {
+        font-size: 1.5rem;
+    }
+
+    /* Layout Adjustments */
+    .container {
+        padding-left: 1.25rem;
+        padding-right: 1.25rem;
+    }
+
+    /* Cards */
+    .card {
+        margin-bottom: 1.5rem;
+    }
+
+    .card-body {
+        padding: 1.25rem;
+    }
+
+    /* Login Page Specifics */
+    .login-card .card-body {
+        padding: 2rem !important;
+    }
+
+    /* Hero Section */
+    .hero-section {
+        min-height: 60vh;
+        text-align: center;
+    }
+
+    .hero-content h1 {
+        font-size: 2.2rem;
+    }
+
+    .hero-content p.lead {
+        font-size: 1.1rem;
+    }
+
+    /* Buttons */
+    .btn-lg {
+        padding: 0.5rem 1.5rem;
+        font-size: 1.1rem;
+    }
+
+    /* Rooms Images */
+    .room-img-wrapper {
+        height: 200px;
+        /* Slightly shorter on mobile */
+    }
+
+    /* Footer */
+    .footer .col-lg-4 {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .footer .input-group {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 575.98px) {
+    /* Small Mobile */
+
+    .fs-3 {
+        font-size: 1.5rem !important;
+        /* Smaller brand logo */
+    }
+
+    .navbar-brand i {
+        font-size: 1.5rem;
+    }
+
+    /* Extreme optimization for small screens */
+    .p-5 {
+        padding: 1.5rem !important;
+    }
+}
