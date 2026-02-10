@@ -59,7 +59,6 @@ public class ReservationServlet extends HttpServlet {
 
             String errorPage = isPublic ? "/booking.jsp" : "/reservation.jsp";
 
-            // Validate input
             if (guestName == null || guestName.isEmpty() || roomType == null ||
                     checkInStr == null || checkOutStr == null) {
                 request.setAttribute("error", "All required fields must be filled.");
