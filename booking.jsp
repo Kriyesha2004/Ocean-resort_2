@@ -11,7 +11,7 @@
         <link rel="stylesheet" href="css/style.css">
     </head>
 
-    <body class="bg-light">
+    <body class="booking-bg">
 
         <jsp:include page="public-navbar.jsp" />
 

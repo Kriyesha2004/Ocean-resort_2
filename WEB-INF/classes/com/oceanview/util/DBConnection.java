@@ -10,15 +10,15 @@ public class DBConnection {
     private static Connection connection = null;
 
     private DBConnection() {
-        // Private constructor to prevent instantiation
+
     }
 
     /**
      * Get database connection using Singleton pattern
      * 
-     * @return Connection object
+     * @return
      * @throws SQLException           if database connection fails
-     * @throws ClassNotFoundException if MySQL driver is not found
+     * @throws ClassNotFoundException
      */
     public static Connection getConnection() throws SQLException, ClassNotFoundException {
         if (connection == null || connection.isClosed()) {

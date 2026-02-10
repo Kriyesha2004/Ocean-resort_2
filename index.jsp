@@ -36,14 +36,14 @@
                                         <label for="username" class="form-label">Username</label>
                                         <input type="text" class="form-control form-control-lg" id="username"
                                             name="username" placeholder="Enter your username" required>
-                                        <small class="form-text text-muted">Default: admin</small>
+
                                     </div>
 
                                     <div class="mb-4">
                                         <label for="password" class="form-label">Password</label>
                                         <input type="password" class="form-control form-control-lg" id="password"
                                             name="password" placeholder="Enter your password" required>
-                                        <small class="form-text text-muted">Default: admin123</small>
+
                                     </div>
 
                                     <button type="submit" class="btn btn-primary btn-lg w-100 mb-3">
@@ -53,9 +53,9 @@
 
                                 <hr>
                                 <div class="alert alert-info alert-sm" role="alert">
-                                    <strong>Demo Credentials:</strong>
-                                    <br>Username: <code>admin</code>
-                                    <br>Password: <code>admin123</code>
+                                    <strong>Example Credentials:</strong>
+                                    <br>Username: <code>example</code>
+                                    <br>Password: <code>example123</code>
                                 </div>
                     </div>
                 </div>
