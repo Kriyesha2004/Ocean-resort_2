@@ -15,6 +15,8 @@
                     <li class="nav-item">
                         <a class="nav-link" href="home.jsp#rooms">Rooms & Suites</a>
                     </li>
+                    <li> <a class="nav-link" href="#about">About Us</a>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#contact">Contact</a>
                     </li>

@@ -3,7 +3,7 @@
 CREATE DATABASE IF NOT EXISTS ocean_view_db;
 USE ocean_view_db;
 
--- Table for Staff Login
+-- Table Staff Login
 CREATE TABLE users (
     user_id INT PRIMARY KEY AUTO_INCREMENT,
     username VARCHAR(50) UNIQUE NOT NULL,
@@ -14,7 +14,7 @@ CREATE TABLE users (
 );
 
 
--- Table for Guest Reservations
+-- Table  Guest Reservations
 CREATE TABLE reservations (
     res_id INT PRIMARY KEY AUTO_INCREMENT,
     guest_name VARCHAR(100) NOT NULL,
