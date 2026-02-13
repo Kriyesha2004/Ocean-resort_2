@@ -83,7 +83,7 @@
                             stay—we offer an experience.
                         </p>
                         <p class="text-secondary mb-4">
-                            Our dedicated team of professionals is committed to ensuring every moment of
+                            Ours dedicated team of professionals is committed to ensuring every moment of
                             your stay is perfect. From our world-class culinary experiences to our
                             rejuvenating spa treatments, every detail is curated for your relaxation and
                             enjoyment.
