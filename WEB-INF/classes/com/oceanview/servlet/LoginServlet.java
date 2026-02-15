@@ -72,7 +72,7 @@ public class LoginServlet extends HttpServlet {
             session.setMaxInactiveInterval(30 * 60);
 
             if (session.getAttribute("is_admin") != null && (Boolean) session.getAttribute("is_admin")) {
-                session.removeAttribute("is_admin"); // Clear the flag
+
                 response.sendRedirect(request.getContextPath() + "/admin_dashboard.jsp");
             } else {
                 response.sendRedirect(request.getContextPath() + "/dashboard.jsp");

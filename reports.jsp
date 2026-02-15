@@ -29,7 +29,9 @@
         </head>
 
         <body>
-            <%@ include file="navbar.jsp" %>
+            <% Boolean isAdmin=(Boolean) session.getAttribute("is_admin"); String navbarFile=(isAdmin !=null && isAdmin)
+                ? "admin_navbar.jsp" : "navbar.jsp" ; %>
+                <jsp:include page="<%= navbarFile %>" />
 
                 <div id="root" class="container-fluid py-4">
                     <!-- React App mounts here -->
