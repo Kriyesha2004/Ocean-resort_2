@@ -68,6 +68,42 @@
                                     </div>
                                 </div>
 
+                                <!-- Notices Section -->
+                                <div class="text-start bg-white p-4 rounded border mt-4">
+                                    <h5 class="mb-3 border-bottom pb-2">
+                                        <i class="bi bi-megaphone"></i> Notices & Messages
+                                    </h5>
+
+                                    <% com.oceanview.dao.MessageDAO msgDAO=new com.oceanview.dao.MessageDAO(); int
+                                        uId=(int) session.getAttribute("user_id"); java.util.List<java.util.Map<String,
+                                        Object>> myMessages = msgDAO.getMessagesForUser(uId);
+                                        %>
+
+                                        <div class="list-group list-group-flush">
+                                            <% if (myMessages.isEmpty()) { %>
+                                                <div class="text-muted text-center py-2">No new messages.</div>
+                                                <% } else { for (java.util.Map<String, Object> msg : myMessages) { %>
+                                                    <div class="list-group-item px-0 border-bottom">
+                                                        <div class="d-flex w-100 justify-content-between">
+                                                            <strong class="text-primary mb-1">
+                                                                <%= msg.get("sender_name") %>
+                                                                    <span class="badge bg-light text-dark border ms-2">
+                                                                        <%= (boolean)msg.get("is_broadcast")
+                                                                            ? "Broadcast" : "Private" %>
+                                                                    </span>
+                                                            </strong>
+                                                            <small class="text-muted" style="font-size: 0.8em;">
+                                                                <%= msg.get("created_at") %>
+                                                            </small>
+                                                        </div>
+                                                        <p class="mb-1 small text-secondary">
+                                                            <%= msg.get("content") %>
+                                                        </p>
+                                                    </div>
+                                                    <% } } %>
+                                        </div>
+                                </div>
+
                                 <div class="mt-4">
                                     <a href="settings.jsp" class="btn btn-outline-primary px-4 me-2">Edit Settings</a>
                                     <a href="dashboard.jsp" class="btn btn-secondary px-4">Back to Dashboard</a>
