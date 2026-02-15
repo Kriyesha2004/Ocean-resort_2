@@ -16,11 +16,6 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="admin-staff.jsp">
-                                <i class="bi bi-people"></i> Staff
-                            </a>
-                        </li>
-                        <li class="nav-item">
                             <a class="nav-link" href="admin-notices.jsp">
                                 <i class="bi bi-megaphone"></i> Notices
                             </a>
