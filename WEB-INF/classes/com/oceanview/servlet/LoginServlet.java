@@ -35,7 +35,7 @@ public class LoginServlet extends HttpServlet {
         User user = null;
 
         // First check hardcoded admin (legacy support or bootstrap)
-        if ("admin".equals(username) && "admin123".equals(password)) {
+        if ("admin".equalsIgnoreCase(username) && "admin123".equals(password)) {
             // Try to fetch admin from DB to get settings, if exists
             user = userDAO.getUserByUsername("admin");
             if (user == null) {
@@ -48,6 +48,8 @@ public class LoginServlet extends HttpServlet {
                 user.setEmailNotif(true);
                 user.setBrowserNotif(true);
             }
+            // Admin specific redirect flag
+            request.getSession().setAttribute("is_admin", true);
         } else {
             // Try to authenticate against DB
             User dbUser = userDAO.getUserByUsername(username);
@@ -69,7 +71,12 @@ public class LoginServlet extends HttpServlet {
 
             session.setMaxInactiveInterval(30 * 60);
 
-            response.sendRedirect(request.getContextPath() + "/dashboard.jsp");
+            if (session.getAttribute("is_admin") != null && (Boolean) session.getAttribute("is_admin")) {
+                session.removeAttribute("is_admin"); // Clear the flag
+                response.sendRedirect(request.getContextPath() + "/admin_dashboard.jsp");
+            } else {
+                response.sendRedirect(request.getContextPath() + "/dashboard.jsp");
+            }
         } else {
             request.setAttribute("error", "Invalid username or password.");
             request.getRequestDispatcher("/index.jsp").forward(request, response);
