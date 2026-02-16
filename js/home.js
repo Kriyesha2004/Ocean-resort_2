@@ -14,14 +14,53 @@ document.addEventListener('DOMContentLoaded', function () {
             const type = card.dataset.roomType;
             const price = card.dataset.price;
             const description = card.dataset.description;
-            const imageUrl = card.dataset.imageUrl;
+            // Get images string and split into array
+            const imagesStr = card.dataset.images || card.dataset.imageUrl;
+            const images = imagesStr.split(',');
             const capacity = card.dataset.capacity;
             const checkIn = card.dataset.checkIn;
             const checkOut = card.dataset.checkOut;
 
             // Populate Modal Elements
             document.getElementById('roomModalLabel').textContent = type;
-            document.getElementById('modalMainImage').src = imageUrl;
+
+            // Populate Carousel
+            const carouselIndicators = document.getElementById('carouselIndicators');
+            const carouselInner = document.getElementById('carouselInner');
+
+            // Clear existing carousel content
+            carouselIndicators.innerHTML = '';
+            carouselInner.innerHTML = '';
+
+            images.forEach((imgUrl, index) => {
+                // Create Indicator
+                const indicator = document.createElement('button');
+                indicator.type = 'button';
+                indicator.dataset.bsTarget = '#roomCarousel';
+                indicator.dataset.bsSlideTo = index;
+                indicator.ariaLabel = `Slide ${index + 1}`;
+                if (index === 0) {
+                    indicator.classList.add('active');
+                    indicator.ariaCurrent = 'true';
+                }
+                carouselIndicators.appendChild(indicator);
+
+                // Create Carousel Item
+                const item = document.createElement('div');
+                item.classList.add('carousel-item', 'h-100');
+                if (index === 0) {
+                    item.classList.add('active');
+                }
+
+                const img = document.createElement('img');
+                img.src = imgUrl.trim(); // Trim whitespace
+                img.classList.add('d-block', 'w-100', 'h-100', 'object-fit-cover');
+                img.alt = `${type} Room Image ${index + 1}`;
+
+                item.appendChild(img);
+                carouselInner.appendChild(item);
+            });
+
             document.getElementById('roomModalBodyContent').innerHTML = `
                 <div class="row">
                     <div class="col-md-8">

@@ -109,7 +109,8 @@
                         <div class="card room-card h-100" data-room-type="Single" data-price="5,000"
                             data-description="Perfect for solo travelers or business trips. Enjoy a cozy atmosphere with all modern amenities and a beautiful garden view. Features a comfortable single bed, workspace, and en-suite bathroom."
                             data-capacity="1" data-check-in="14:00" data-check-out="11:00"
-                            data-image-url="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80">
+                            data-image-url="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                            data-images="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80,https://images.unsplash.com/photo-1598928506311-c55ded91a20c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80,https://images.unsplash.com/photo-1505693416388-b034631ac954?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80">
 
                             <div class="room-img-wrapper" style="cursor: pointer;">
                                 <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
@@ -149,7 +150,8 @@
                             data-price="8,500"
                             data-description="Ideal for couples or friends. Spacious room with a king-size bed, private balcony, and stunning ocean views. Includes a mini-bar and premium toiletries."
                             data-capacity="2" data-check-in="14:00" data-check-out="11:00"
-                            data-image-url="https://images.unsplash.com/photo-1611892440504-42a792e24d32?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80">
+                            data-image-url="https://images.unsplash.com/photo-1611892440504-42a792e24d32?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                            data-images="https://images.unsplash.com/photo-1611892440504-42a792e24d32?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80,https://images.unsplash.com/photo-1590490360182-c33d57733427?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80,https://images.unsplash.com/photo-1566665797739-1674de7a421a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80">
 
                             <div class="position-absolute top-0 start-50 translate-middle badge rounded-pill bg-primary px-3 py-2 shadow"
                                 style="z-index: 2;">POPULAR</div>
@@ -191,7 +193,8 @@
                         <div class="card room-card h-100" data-room-type="Luxury" data-price="15,000"
                             data-description="The ultimate experience. Expansive suite with separate living area, jacuzzi, and premium concierge service. Enjoy panoramic views and exclusive access to the VIP lounge."
                             data-capacity="4" data-check-in="13:00" data-check-out="12:00"
-                            data-image-url="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80">
+                            data-image-url="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                            data-images="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80,https://images.unsplash.com/photo-1591088398332-8a7791972843?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80,https://images.unsplash.com/photo-1578683010236-d716f9a3f461?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80">
 
                             <div class="room-img-wrapper" style="cursor: pointer;">
                                 <img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
@@ -285,9 +288,24 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body p-0">
-                        <!-- Modal Hero Image -->
-                        <div class="position-relative" style="height: 400px;">
-                            <img src="" id="modalMainImage" class="w-100 h-100 object-fit-cover" alt="Room View">
+                        <!-- Modal Hero Image Carousel -->
+                        <div id="roomCarousel" class="carousel slide" data-bs-ride="carousel">
+                            <div class="carousel-indicators" id="carouselIndicators">
+                                <!-- Indicators injected via JS -->
+                            </div>
+                            <div class="carousel-inner" id="carouselInner" style="height: 400px;">
+                                <!-- Images injected via JS -->
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#roomCarousel"
+                                data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#roomCarousel"
+                                data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
                         </div>
 
                         <div class="p-4 p-lg-5" id="roomModalBodyContent">
