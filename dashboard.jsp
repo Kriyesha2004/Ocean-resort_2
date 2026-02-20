@@ -12,8 +12,7 @@
                     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
                         rel="stylesheet">
                     <link rel="stylesheet" href="css/style.css">
-                    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css' rel='stylesheet' />
-                    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js'></script>
+
                     <script>
                         setTimeout(function () {
                             window.location.reload();
@@ -133,18 +132,7 @@
                                 </div>
                             </div>
 
-                            <div class="row g-4 mt-3">
-                                <div class="col-md-12">
-                                    <div class="card border-0 shadow-sm">
-                                        <div class="card-header bg-light border-bottom">
-                                            <h5 class="card-title mb-0">Reservation Calendar</h5>
-                                        </div>
-                                        <div class="card-body">
-                                            <div id='calendar'></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+
 
                             <div class="row g-4 mt-3">
                                 <!-- Quick Actions -->
@@ -173,72 +161,6 @@
                             src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
                         <script>
-                            document.addEventListener('DOMContentLoaded', function () {
-                                var calendarEl = document.getElementById('calendar');
-                                var calendar = new FullCalendar.Calendar(calendarEl, {
-                                    initialView: 'dayGridMonth',
-                                    headerToolbar: {
-                                        left: 'prev,next today',
-                                        center: 'title',
-                                        right: 'dayGridMonth,timeGridWeek,listMonth'
-                                    },
-                                    themeSystem: 'bootstrap5',
-                                    events: 
-                                <%
-                                        StringBuilder eventsJson = new StringBuilder("[");
-                                    try {
-                                        java.sql.Connection connCal = com.oceanview.util.DBConnection.getConnection();
-                                        String sqlCal = "SELECT r.guest_name, r.check_in, r.check_out, r.status, rm.room_number FROM reservations r LEFT JOIN rooms rm ON r.room_id = rm.room_id";
-                                        java.sql.PreparedStatement pstCal = connCal.prepareStatement(sqlCal);
-                                        java.sql.ResultSet rsCal = pstCal.executeQuery();
-                                        boolean first = true;
-                                        while(rsCal.next()) {
-                                            if(!first) eventsJson.append(",");
-                                            
-                                            String status = rsCal.getString("status");
-                                            String color = "#3788d8";
-                                if ("Confirmed".equals(status)) {
-                                    color = "#198754";
-                                } else if ("Checked-In".equals(status)) {
-                                    color = "#0dcaf0";
-                                } else if ("Pending".equals(status)) {
-                                    color = "#ffc107";
-                                } else if ("Cancelled".equals(status)) {
-                                    color = "#dc3545";
-                                }
-                                            
-                                            String rawTitle = rsCal.getString("guest_name");
-                                            String rNum = rsCal.getString("room_number");
-                                if (rNum != null) {
-                                    rawTitle += " (Rm " + rNum + ")";
-                                }
-                                            String safeTitle = rawTitle.replace("'", "\\'");
-                                            
-                                            String start = rsCal.getString("check_in");
-                                            String end = rsCal.getString("check_out");
-
-                                eventsJson.append("{");
-                                eventsJson.append("title: '").append(safeTitle).append("',");
-                                eventsJson.append("start: '").append(start).append("',");
-                                eventsJson.append("end: '").append(end).append("',");
-                                eventsJson.append("color: '").append(color).append("',");
-                                eventsJson.append("allDay: true");
-                                eventsJson.append("}");
-
-                                first = false;
-                            }
-                                        rsCal.close();
-                            pstCal.close();
-                                    } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                            eventsJson.append("]");
-                            out.print(eventsJson.toString()); 
-                                %>
-            });
-                            calendar.render();
-                            });
-
                             document.addEventListener('DOMContentLoaded', function () {
                                 // Check if browser notifications are enabled in session settings
                                 // Note: This relies on the JSP rendering 'true' or 'false' directly into the JS code.
