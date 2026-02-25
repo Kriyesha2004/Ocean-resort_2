@@ -62,7 +62,7 @@ public class ReportsServlet extends HttpServlet {
         pst.close();
 
         // Total Revenue
-        pst = conn.prepareStatement("SELECT SUM(total_bill) FROM reservations");
+        pst = conn.prepareStatement("SELECT SUM(total_bill) FROM reservations WHERE status = 'Checked-Out'");
         rs = pst.executeQuery();
         if (rs.next())
             totalRevenue = rs.getDouble(1);
@@ -94,7 +94,8 @@ public class ReportsServlet extends HttpServlet {
                 year = "YEAR(CURDATE())";
 
             String sql = "SELECT MONTH(check_in) as m, SUM(total_bill) as rev FROM reservations " +
-                    "WHERE YEAR(check_in) = " + year + " GROUP BY MONTH(check_in) ORDER BY m";
+                    "WHERE status = 'Checked-Out' AND YEAR(check_in) = " + year
+                    + " GROUP BY MONTH(check_in) ORDER BY m";
             PreparedStatement pst = conn.prepareStatement(sql);
             ResultSet rs = pst.executeQuery();
 
@@ -119,7 +120,7 @@ public class ReportsServlet extends HttpServlet {
         } else {
             // Yearly
             String sql = "SELECT YEAR(check_in) as y, SUM(total_bill) as rev FROM reservations " +
-                    "GROUP BY YEAR(check_in) ORDER BY y";
+                    "WHERE status = 'Checked-Out' GROUP BY YEAR(check_in) ORDER BY y";
             PreparedStatement pst = conn.prepareStatement(sql);
             ResultSet rs = pst.executeQuery();
 

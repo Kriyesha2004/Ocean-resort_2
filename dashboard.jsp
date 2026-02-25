@@ -114,7 +114,7 @@
                                                     <h2 class="text-info mb-0">
                                                         $
                                                         <% try { Connection conn=DBConnection.getConnection(); String
-                                                            sql="SELECT SUM(total_bill) as revenue FROM reservations WHERE MONTH(created_at) = MONTH(NOW()) AND YEAR(created_at) = YEAR(NOW())"
+                                                            sql="SELECT SUM(total_bill) as revenue FROM reservations WHERE status = 'Checked-Out' AND MONTH(created_at) = MONTH(NOW()) AND YEAR(created_at) = YEAR(NOW())"
                                                             ; PreparedStatement pst=conn.prepareStatement(sql);
                                                             ResultSet rs=pst.executeQuery(); if (rs.next()) { Double
                                                             revenue=rs.getDouble("revenue");

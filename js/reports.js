@@ -55,7 +55,7 @@ const ReportsDashboard = () => {
     const dynamicStats = useMemo(() => {
         return filteredBookings.reduce((acc, curr) => {
             acc.count++;
-            acc.revenue += curr.totalBill;
+            if (curr.status === 'Checked-Out') acc.revenue += curr.totalBill;
             if (curr.status === 'Checked-In') acc.checkedIn++;
             return acc;
         }, { count: 0, revenue: 0, checkedIn: 0 });
@@ -78,16 +78,20 @@ const ReportsDashboard = () => {
             const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
             const monthData = new Array(12).fill(0);
             filteredBookings.forEach(b => {
-                const date = new Date(b.checkIn);
-                monthData[date.getMonth()] += b.totalBill;
+                if (b.status === 'Checked-Out') {
+                    const date = new Date(b.checkIn);
+                    monthData[date.getMonth()] += b.totalBill;
+                }
             });
             labels.push(...months);
             dataPoints.push(...monthData);
         } else {
             // Show daily trend for the month
             filteredBookings.forEach(b => {
-                labels.push(b.checkIn); // Simple date label
-                dataPoints.push(b.totalBill);
+                if (b.status === 'Checked-Out') {
+                    labels.push(b.checkIn); // Simple date label
+                    dataPoints.push(b.totalBill);
+                }
             });
             // Sort by date would be better but keeping it simple for now
         }
@@ -120,7 +124,9 @@ const ReportsDashboard = () => {
 
         // B. Revenue by Room Type (Doughnut)
         const roomStats = filteredBookings.reduce((acc, curr) => {
-            acc[curr.roomType] = (acc[curr.roomType] || 0) + curr.totalBill;
+            if (curr.status === 'Checked-Out') {
+                acc[curr.roomType] = (acc[curr.roomType] || 0) + curr.totalBill;
+            }
             return acc;
         }, {});
 
