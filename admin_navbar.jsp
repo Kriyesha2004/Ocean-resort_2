@@ -21,6 +21,11 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" href="admin-rooms.jsp">
+                                <i class="bi bi-door-open"></i> Rooms
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="reports.jsp">
                                 <i class="bi bi-file-earmark-bar-graph"></i> Reports
                             </a>

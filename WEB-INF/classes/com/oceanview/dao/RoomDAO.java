@@ -83,4 +83,16 @@ public class RoomDAO {
         pst.close();
         return availableRoom;
     }
+
+    public void updateRoom(Room room) throws Exception {
+        Connection conn = DBConnection.getConnection();
+        String query = "UPDATE rooms SET room_number = ?, room_type = ?, status = ? WHERE room_id = ?";
+        PreparedStatement pst = conn.prepareStatement(query);
+        pst.setString(1, room.getRoomNumber());
+        pst.setString(2, room.getRoomType());
+        pst.setString(3, room.getStatus());
+        pst.setInt(4, room.getRoomId());
+        pst.executeUpdate();
+        pst.close();
+    }
 }

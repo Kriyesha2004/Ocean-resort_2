@@ -24,16 +24,43 @@
                         
                         out.println("Starting migration...");
 
-                        // 1. Create rooms table
+                        // 1. Create room_types table
+                        String createRoomTypes = "CREATE TABLE IF NOT EXISTS room_types (" +
+                                "type_id INT PRIMARY KEY AUTO_INCREMENT, " +
+                                "type_name VARCHAR(50) UNIQUE NOT NULL, " +
+                                "price DECIMAL(10, 2) NOT NULL, " +
+                                "description TEXT, " +
+                                "image_url VARCHAR(255), " +
+                                "capacity INT DEFAULT 1)";
+                        stmt.executeUpdate(createRoomTypes);
+                        out.println("✓ Table 'room_types' checked/created.");
+
+                        // 2. Create rooms table
                         String createRooms = "CREATE TABLE IF NOT EXISTS rooms (" +
                                 "room_id INT PRIMARY KEY AUTO_INCREMENT, " +
                                 "room_number VARCHAR(10) UNIQUE NOT NULL, " +
-                                "room_type ENUM('Single', 'Double', 'Luxury') NOT NULL, " +
+                                "room_type VARCHAR(50) NOT NULL, " + // Changed from ENUM to VARCHAR for flexibility
                                 "status ENUM('Available', 'Booked', 'Maintenance') DEFAULT 'Available')";
                         stmt.executeUpdate(createRooms);
                         out.println("✓ Table 'rooms' checked/created.");
 
-                        // 2. Add room_id to reservations if not exists
+                        // 3. Seed Room Types (Only if empty)
+                        ResultSet rsTypeCount = stmt.executeQuery("SELECT COUNT(*) FROM room_types");
+                        rsTypeCount.next();
+                        if (rsTypeCount.getInt(1) == 0) {
+                            out.println("Seeding initial room types...");
+                            stmt.addBatch("INSERT INTO room_types (type_name, price, description, image_url, capacity) VALUES " +
+                                "('Single', 5000.00, 'Perfect for solo travelers or business trips. Enjoy a cozy atmosphere with all modern amenities and a beautiful garden view.', 'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', 1)");
+                            stmt.addBatch("INSERT INTO room_types (type_name, price, description, image_url, capacity) VALUES " +
+                                "('Double', 8500.00, 'Ideal for couples or friends. Spacious room with a king-size bed, private balcony, and stunning ocean views. Includes a mini-bar and premium toiletries.', 'https://images.unsplash.com/photo-1611892440504-42a792e24d32?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', 2)");
+                            stmt.addBatch("INSERT INTO room_types (type_name, price, description, image_url, capacity) VALUES " +
+                                "('Luxury', 15000.00, 'The ultimate experience. Expansive suite with separate living area, jacuzzi, and premium concierge service. Enjoy panoramic views and exclusive access to the VIP lounge.', 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', 4)");
+                            stmt.executeBatch();
+                            out.println("✓ Seeded 3 room types.");
+                        }
+                        rsTypeCount.close();
+
+                        // 4. Add room_id to reservations if not exists
                         // Check if column exists first to avoid error on re-run
                         DatabaseMetaData md = conn.getMetaData();
                         ResultSet rs = md.getColumns(null, null, "reservations", "room_id");
@@ -50,7 +77,7 @@
                         }
                         rs.close();
 
-                        // 3. Seed Data (Only if empty)
+                        // 5. Seed Data (Only if empty)
                         ResultSet rsRooms = stmt.executeQuery("SELECT COUNT(*) FROM rooms");
                         rsRooms.next();
                         if (rsRooms.getInt(1) == 0) {
@@ -82,18 +109,7 @@
                         out.println("\nERROR: " + e.getMessage());
                         e.printStackTrace(new java.io.PrintWriter(out));
                     } finally {
-                        if (stmt != null) stmt.close();
-                        if (conn != null) conn.close(); // Helper might return singleton, but typically fine to close handle if implementation supports it. 
-                        // Checked DBConnection earlier, it has closeConnection() but returning the connection object directly means we invoke .close() on raw connection.
-                        // Ideally we should use DBConnection.closeConnection() if implemented, but standard jdbc .close() is expected by most containers/pools.
-                        // Our DBConnection.closeConnection is static and closes the *singleton* instance entirely. 
-                        // So calling .close() on the connection object itself is correct for standard JDBC resource management, 
-                        // UNLESS DBConnection intends to keep it open forever. 
-                        // Given the previous code, checking DBConnection.java: 
-                        // It's a static field. converting to use DBConnection.getConnection() usually returns the SAME connection.
-                        // If we close it, it closes for everyone.
-                        // FIX: We should NOT close the shared singleton connection here if it's shared app-wide.
-                        // Let's just NOT close it in this script since it's a singleton.
+                        // Singleton connection - do not close
                     }
                     %>
                 </pre>
