@@ -5,6 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -22,7 +23,7 @@ class DBConnectionTest {
 
     @Test
     @DisplayName("Should establish database connection")
-    void testGetConnection() throws ClassNotFoundException {
+    void testGetConnection() throws ClassNotFoundException, SQLException {
         Connection conn = DBConnection.getConnection();
         
         assertNotNull(conn, "Database connection should not be null");
@@ -30,7 +31,7 @@ class DBConnectionTest {
 
     @Test
     @DisplayName("Should return active connection")
-    void testConnectionIsValid() throws ClassNotFoundException {
+    void testConnectionIsValid() throws ClassNotFoundException, SQLException {
         Connection conn = DBConnection.getConnection();
         
         assertNotNull(conn, "Connection should be established");
@@ -39,7 +40,7 @@ class DBConnectionTest {
 
     @Test
     @DisplayName("Should handle multiple connection requests")
-    void testMultipleConnections() throws ClassNotFoundException {
+    void testMultipleConnections() throws ClassNotFoundException, SQLException {
         Connection conn1 = DBConnection.getConnection();
         Connection conn2 = DBConnection.getConnection();
         
