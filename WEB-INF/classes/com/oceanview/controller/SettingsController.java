@@ -1,4 +1,4 @@
-package com.oceanview.servlet;
+package com.oceanview.controller;
 
 import com.oceanview.dao.UserDAO;
 import javax.servlet.ServletException;
@@ -9,8 +9,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
+/**
+ * SettingsController - Handles user settings and preferences.
+ * Refactored from servlet package to follow MVC architecture.
+ */
 @WebServlet("/settings")
-public class SettingsServlet extends HttpServlet {
+public class SettingsController extends HttpServlet {
 
     private UserDAO userDAO;
 

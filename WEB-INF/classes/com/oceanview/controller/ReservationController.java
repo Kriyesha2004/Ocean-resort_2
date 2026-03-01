@@ -1,4 +1,4 @@
-package com.oceanview.servlet;
+package com.oceanview.controller;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -11,8 +11,13 @@ import com.oceanview.util.DBConnection;
 import com.oceanview.service.BillingService;
 import com.oceanview.service.ReservationService;
 
+/**
+ * ReservationController - Handles reservation CRUD operations.
+ * Manages creation, update, deletion, and status changes for reservations.
+ * Refactored from servlet package to follow MVC architecture.
+ */
 @WebServlet("/reservation")
-public class ReservationServlet extends HttpServlet {
+public class ReservationController extends HttpServlet {
 
     private BillingService billingService = new BillingService();
 

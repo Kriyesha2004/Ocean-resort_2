@@ -1,4 +1,4 @@
-package com.oceanview.servlet;
+package com.oceanview.controller;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -8,8 +8,13 @@ import java.sql.*;
 import com.oceanview.util.DBConnection;
 import javax.servlet.annotation.WebServlet;
 
+/**
+ * ReportsController - Handles analytics and reporting functionality.
+ * Returns statistical data in JSON format for charts and reports.
+ * Refactored from servlet package to follow MVC architecture.
+ */
 @WebServlet("/api/reports")
-public class ReportsServlet extends HttpServlet {
+public class ReportsController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

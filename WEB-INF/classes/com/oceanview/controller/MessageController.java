@@ -1,4 +1,4 @@
-package com.oceanview.servlet;
+package com.oceanview.controller;
 
 import com.oceanview.dao.MessageDAO;
 import javax.servlet.ServletException;
@@ -9,8 +9,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
+/**
+ * MessageController - Handles messaging operations.
+ * Refactored from servlet package to follow MVC architecture.
+ */
 @WebServlet("/send-message")
-public class MessageServlet extends HttpServlet {
+public class MessageController extends HttpServlet {
 
     private MessageDAO messageDAO = new MessageDAO();
 

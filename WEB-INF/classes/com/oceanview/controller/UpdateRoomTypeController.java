@@ -1,4 +1,4 @@
-package com.oceanview.servlet;
+package com.oceanview.controller;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -7,8 +7,13 @@ import java.io.IOException;
 import com.oceanview.dao.RoomTypeDAO;
 import com.oceanview.model.RoomType;
 
+/**
+ * UpdateRoomTypeController - Handles room type update operations.
+ * Manages room type details like pricing, capacity, and descriptions.
+ * Refactored from servlet package to follow MVC architecture.
+ */
 @WebServlet("/update-room-type")
-public class UpdateRoomTypeServlet extends HttpServlet {
+public class UpdateRoomTypeController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)

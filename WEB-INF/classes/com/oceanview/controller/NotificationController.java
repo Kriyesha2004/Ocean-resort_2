@@ -1,4 +1,4 @@
-package com.oceanview.servlet;
+package com.oceanview.controller;
 
 import com.oceanview.util.DBConnection;
 import java.io.IOException;
@@ -13,8 +13,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+/**
+ * NotificationController - Handles real-time notification retrieval.
+ * Returns notification data in JSON format.
+ * Refactored from servlet package to follow MVC architecture.
+ */
 @WebServlet("/api/notifications")
-public class NotificationServlet extends HttpServlet {
+public class NotificationController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

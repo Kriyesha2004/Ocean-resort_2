@@ -1,4 +1,4 @@
-package com.oceanview.servlet;
+package com.oceanview.controller;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -7,8 +7,12 @@ import com.oceanview.model.User;
 import javax.servlet.annotation.WebServlet;
 import java.io.*;
 
+/**
+ * LoginController - Handles user authentication and session management.
+ * Refactored from servlet package to follow MVC architecture.
+ */
 @WebServlet("/login")
-public class LoginServlet extends HttpServlet {
+public class LoginController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

@@ -1,20 +1,22 @@
-package com.oceanview.servlet;
+package com.oceanview.controller;
 
+import javax.servlet.*;
+import javax.servlet.http.*;
 import com.oceanview.util.DBConnection;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
+/**
+ * CalendarController - Handles calendar event retrieval for reservations.
+ * Returns event data in JSON format for FullCalendar integration.
+ * Refactored from servlet package to follow MVC architecture.
+ */
 @WebServlet("/api/calendar")
-public class CalendarServlet extends HttpServlet {
+public class CalendarController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

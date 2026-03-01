@@ -1,4 +1,4 @@
-package com.oceanview.servlet;
+package com.oceanview.controller;
 
 import com.oceanview.dao.UserDAO;
 import com.oceanview.model.User;
@@ -10,8 +10,13 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
+/**
+ * StaffController - Manages staff member CRUD operations.
+ * Allows admin to add, edit, and delete staff members.
+ * Refactored from servlet package to follow MVC architecture.
+ */
 @WebServlet("/staff-action")
-public class StaffServlet extends HttpServlet {
+public class StaffController extends HttpServlet {
 
     private UserDAO userDAO = new UserDAO();
 
