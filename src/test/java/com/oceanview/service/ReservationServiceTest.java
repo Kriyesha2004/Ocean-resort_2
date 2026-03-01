@@ -26,7 +26,7 @@ class ReservationServiceTest {
 
     @Test
     @DisplayName("Should find available room for valid date range")
-    void testFindAvailableRoom() {
+    void testFindAvailableRoom() throws Exception {
         LocalDate checkIn = LocalDate.of(2026, 3, 15);
         LocalDate checkOut = LocalDate.of(2026, 3, 18);
 
@@ -38,7 +38,7 @@ class ReservationServiceTest {
 
     @Test
     @DisplayName("Should return available room with valid room ID")
-    void testFindAvailableRoomHasId() {
+    void testFindAvailableRoomHasId() throws Exception {
         LocalDate checkIn = LocalDate.of(2026, 3, 1);
         LocalDate checkOut = LocalDate.of(2026, 3, 5);
 
@@ -51,7 +51,7 @@ class ReservationServiceTest {
 
     @Test
     @DisplayName("Should find room with correct status")
-    void testFindAvailableRoomStatus() {
+    void testFindAvailableRoomStatus() throws Exception {
         LocalDate checkIn = LocalDate.of(2026, 4, 1);
         LocalDate checkOut = LocalDate.of(2026, 4, 3);
 
