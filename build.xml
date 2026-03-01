@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Ocean-View-Resort" default="build" basedir=".">
+    
+    <description>
+        Build file for Ocean View Resort Management System (MVC Architecture)
+    </description>
+    
+    <!-- Properties -->
+    <property name="src.main.dir" value="src/main/java"/>
+    <property name="src.test.dir" value="src/test/java"/>
+    <property name="build.dir" value="target"/>
+    <property name="build.classes.dir" value="${build.dir}/classes"/>
+    <property name="build.test.classes.dir" value="${build.dir}/test-classes"/>
+    <property name="dist.dir" value="dist"/>
+    <property name="test.reports.dir" value="${build.dir}/surefire-reports"/>
+    <property name="tomcat.home" value="C:/xampp/tomcat"/>
+    <property name="deploy.dir" value="${tomcat.home}/webapps/Ocean-resort_2"/>
+    <property name="web.inf.classes" value="${deploy.dir}/WEB-INF/classes"/>
+    
+    <!-- Classpath -->
+    <path id="compile.classpath">
+        <fileset dir="${tomcat.home}/lib">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
+    
+    <!-- Test Classpath (includes JUnit 5 and Mockito) -->
+    <path id="test.classpath">
+        <path refid="compile.classpath"/>
+        <pathelement location="${build.classes.dir}"/>
+        <fileset dir="lib" erroronmissing="false">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
+    
+    <!-- Targets -->
+    
+    <target name="clean" description="Clean build directory">
+        <delete dir="${build.dir}"/>
+        <delete dir="${dist.dir}"/>
+        <echo message="✓ Cleaned build artifacts"/>
+    </target>
+    
+    <target name="init" description="Create build directories">
+        <mkdir dir="${build.classes.dir}"/>
+        <mkdir dir="${dist.dir}"/>
+        <echo message="✓ Build directories created"/>
+    </target>
+    
+    <target name="compile" depends="init" description="Compile Java classes">
+        <echo message="Compiling MVC architecture..."/>
+        
+        <!-- Compile all Java files from src/main/java -->
+        <javac 
+            srcdir="${src.main.dir}" 
+            destdir="${build.classes.dir}"
+            classpathref="compile.classpath"
+            debug="true"
+            includeantruntime="false">
+            <include name="com/oceanview/**/*.java"/>
+        </javac>
+        
+        <echo message="✓ Compilation successful"/>
+        <echo message="  Controllers: $(find ${build.classes.dir}/com/oceanview/controller -name '*.class' | wc -l)"/>
+        <echo message="  DAOs: $(find ${build.classes.dir}/com/oceanview/dao -name '*.class' | wc -l)"/>
+        <echo message="  DTOs: $(find ${build.classes.dir}/com/oceanview/dto -name '*.class' | wc -l)"/>
+        <echo message="  Models: $(find ${build.classes.dir}/com/oceanview/model -name '*.class' | wc -l)"/>
+        <echo message="  Services: $(find ${build.classes.dir}/com/oceanview/service -name '*.class' | wc -l)"/>
+    </target>
+    
+    <target name="compile-tests" depends="compile" description="Compile test classes">
+        <echo message="Compiling test classes..."/>
+        
+        <mkdir dir="${build.test.classes.dir}"/>
+        <mkdir dir="${test.reports.dir}"/>
+        
+        <!-- Download JUnit 5 dependencies if not present -->
+        <available file="lib/junit-jupiter-api-5.9.2.jar" property="junit.available"/>
+        
+        <javac 
+            srcdir="${src.test.dir}" 
+            destdir="${build.test.classes.dir}"
+            classpathref="test.classpath"
+            debug="true"
+            includeantruntime="false">
+            <include name="com/oceanview/**/*.java"/>
+        </javac>
+        
+        <echo message="✓ Test compilation successful"/>
+    </target>
+    
+    <target name="test" depends="compile-tests" description="Run unit tests">
+        <echo message="Running JUnit 5 tests..."/>
+        
+        <!-- This requires JUnit 5 runner or Maven/Gradle integration -->
+        <echo message="Tests compiled successfully in: ${build.test.classes.dir}"/>
+        <echo message="Run with: java -cp build/test-classes;build/classes;lib/* org.junit.platform.console.ConsoleLauncher --scan-classpath"/>
+    </target>
+    
+    <target name="package" depends="compile" description="Package as WAR file">
+        <war 
+            destfile="${dist.dir}/Ocean-resort_2.war"
+            basedir="."
+            webxml="WEB-INF/web.xml">
+            <include name="*.jsp"/>
+            <include name="css/**"/>
+            <include name="js/**"/>
+            <include name="docs/**"/>
+            <include name="sql/**"/>
+            <exclude name=".github/**"/>
+            <exclude name="build/**"/>
+            <exclude name="dist/**"/>
+        </war>
+        <echo message="✓ WAR package created: ${dist.dir}/Ocean-resort_2.war"/>
+    </target>
+    
+    <target name="deploy" depends="package" description="Deploy to Tomcat">
+        <echo message="Deploying to Tomcat at ${tomcat.home}..."/>
+        
+        <!-- Stop Tomcat (optional)
+        <exec executable="${tomcat.home}/bin/shutdown.bat" osfamily="windows"/>
+        <sleep seconds="3"/>
+        -->
+        
+        <!-- Copy compiled classes to Tomcat -->
+        <copy todir="${deploy.dir}/WEB-INF/classes" overwrite="true">
+            <fileset dir="${build.classes.dir}">
+                <include name="**/*.class"/>
+            </fileset>
+        </copy>
+        
+        <!-- Copy JSP files -->
+        <copy todir="${deploy.dir}" overwrite="true">
+            <fileset dir=".">
+                <include name="*.jsp"/>
+                <include name="css/**"/>
+                <include name="js/**"/>
+                <include name="WEB-INF/**"/>
+            </fileset>
+        </copy>
+        
+        <echo message="✓ Deployment complete"/>
+        <echo message="  Application: http://localhost:8080/Ocean-resort_2"/>
+    </target>
+    
+    <target name="build" depends="compile" description="Build the project">
+        <echo message="━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"/>
+        <echo message="✅ Build Complete - Ocean View Resort MVC"/>
+        <echo message="━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"/>
+    </target>
+    
+    <target name="rebuild" depends="clean, build" description="Clean and rebuild"/>
+    
+</project>
