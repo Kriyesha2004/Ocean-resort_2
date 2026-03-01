@@ -20,7 +20,7 @@ public class UpdateRoomTypeController extends HttpServlet {
             throws ServletException, IOException {
         HttpSession session = request.getSession();
         if (session.getAttribute("user_id") == null) {
-            response.sendRedirect("index.jsp");
+            response.sendRedirect(request.getContextPath() + "/index.jsp");
             return;
         }
 
@@ -47,6 +47,6 @@ public class UpdateRoomTypeController extends HttpServlet {
         } catch (Exception e) {
             session.setAttribute("errorMsg", "Error updating room category: " + e.getMessage());
         }
-        response.sendRedirect("admin-rooms.jsp");
+        response.sendRedirect(request.getContextPath() + "/view/admin-rooms");
     }
 }

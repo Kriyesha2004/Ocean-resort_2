@@ -1,8 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-    <% if (session.getAttribute("user_id")==null) { response.sendRedirect("index.jsp"); return; } %>
+    <% if (session.getAttribute("user_id")==null) { response.sendRedirect(request.getContextPath() + "/index.jsp"); return; } %>
         <nav class="navbar navbar-expand-lg navbar-dark navbar-custom sticky-top">
             <div class="container-fluid">
-                <a class="navbar-brand fw-bold fs-3" href="dashboard.jsp">
+                <a class="navbar-brand fw-bold fs-3" href="${pageContext.request.contextPath}/view/dashboard">
                     <i class="bi bi-tsunami"></i> Ocean View
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -11,22 +11,22 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto align-items-center">
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="dashboard.jsp">
+                            <a class="nav-link active" aria-current="page" href="${pageContext.request.contextPath}/view/dashboard">
                                 <i class="bi bi-grid mb-1 d-block d-lg-none"></i> Dashboard
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="reservation.jsp">
+                            <a class="nav-link" href="${pageContext.request.contextPath}/view/reservation">
                                 New Reservation
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="reservations-list.jsp">
+                            <a class="nav-link" href="${pageContext.request.contextPath}/view/reservations-list">
                                 Reservations
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="reports.jsp">
+                            <a class="nav-link" href="${pageContext.request.contextPath}/view/reports">
                                 Reports
                             </a>
                         </li>
@@ -39,9 +39,9 @@
                             <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0"
                                 style="background: var(--bg-card); backdrop-filter: blur(10px);"
                                 aria-labelledby="userDropdown">
-                                <li><a class="dropdown-item" style="color: var(--text-main);" href="profile.jsp"><i
+                                <li><a class="dropdown-item" style="color: var(--text-main);" href="${pageContext.request.contextPath}/view/profile"><i
                                             class="bi bi-person me-2"></i>Profile</a></li>
-                                <li><a class="dropdown-item" style="color: var(--text-main);" href="settings.jsp"><i
+                                <li><a class="dropdown-item" style="color: var(--text-main);" href="${pageContext.request.contextPath}/view/settings"><i
                                             class="bi bi-gear me-2"></i>Settings</a></li>
                                 <li>
                                     <hr class="dropdown-divider" style="border-color: var(--border-color);">

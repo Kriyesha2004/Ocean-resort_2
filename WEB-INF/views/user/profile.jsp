@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-    <% if (session.getAttribute("user_id")==null) { response.sendRedirect("index.jsp"); return; } %>
+    <% if (session.getAttribute("user_id")==null) { response.sendRedirect(request.getContextPath() + "/index.jsp"); return; } %>
         <!DOCTYPE html>
         <html lang="en">
 
@@ -12,13 +12,13 @@
             <!-- Bootstrap Icons -->
             <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
             <!-- Custom CSS -->
-            <link rel="stylesheet" href="css/style.css">
+            <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
         </head>
 
         <body class="bg-light">
 
             <!-- Navigation -->
-            <jsp:include page="navbar.jsp" />
+            <jsp:include page="/WEB-INF/views/shared/navbar.jsp" />
 
             <div class="container mt-5">
                 <div class="row justify-content-center">
@@ -105,8 +105,8 @@
                                 </div>
 
                                 <div class="mt-4">
-                                    <a href="settings.jsp" class="btn btn-outline-primary px-4 me-2">Edit Settings</a>
-                                    <a href="dashboard.jsp" class="btn btn-secondary px-4">Back to Dashboard</a>
+                                    <a href="${pageContext.request.contextPath}/view/settings" class="btn btn-outline-primary px-4 me-2">Edit Settings</a>
+                                    <a href="${pageContext.request.contextPath}/view/dashboard" class="btn btn-secondary px-4">Back to Dashboard</a>
                                 </div>
                             </div>
                         </div>

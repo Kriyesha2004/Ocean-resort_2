@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
     if (session.getAttribute("user_id") == null) {
-        response.sendRedirect("index.jsp");
+        response.sendRedirect(request.getContextPath() + "/index.jsp");
         return;
     }
 %>
@@ -12,10 +12,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>New Reservation - Ocean View Resort</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 </head>
 <body>
-    <%@ include file="navbar.jsp" %>
+    <%@ include file="/WEB-INF/views/shared/navbar.jsp" %>
     
     <div class="container py-4">
         <div class="row">
@@ -118,7 +118,7 @@
                                 <button type="submit" class="btn btn-primary btn-lg">
                                     <i class="bi bi-check-circle"></i> Create Reservation
                                 </button>
-                                <a href="dashboard.jsp" class="btn btn-secondary btn-lg">
+                                <a href="${pageContext.request.contextPath}/view/dashboard" class="btn btn-secondary btn-lg">
                                     <i class="bi bi-x-circle"></i> Cancel
                                 </a>
                             </div>
@@ -130,6 +130,6 @@
     </div>
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="js/reservation.js"></script>
+    <script src="${pageContext.request.contextPath}/js/reservation.js"></script>
 </body>
 </html>

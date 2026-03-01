@@ -76,10 +76,9 @@ public class LoginController extends HttpServlet {
             session.setMaxInactiveInterval(30 * 60);
 
             if (session.getAttribute("is_admin") != null && (Boolean) session.getAttribute("is_admin")) {
-
-                response.sendRedirect(request.getContextPath() + "/admin_dashboard.jsp");
+                request.getRequestDispatcher("/WEB-INF/views/admin/admin_dashboard.jsp").forward(request, response);
             } else {
-                response.sendRedirect(request.getContextPath() + "/dashboard.jsp");
+                request.getRequestDispatcher("/WEB-INF/views/user/dashboard.jsp").forward(request, response);
             }
         } else {
             request.setAttribute("error", "Invalid username or password.");

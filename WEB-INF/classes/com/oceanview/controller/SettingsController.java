@@ -29,7 +29,7 @@ public class SettingsController extends HttpServlet {
 
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("user_id") == null) {
-            response.sendRedirect("index.jsp");
+            response.sendRedirect(request.getContextPath() + "/index.jsp");
             return;
         }
 
@@ -54,6 +54,6 @@ public class SettingsController extends HttpServlet {
             session.setAttribute("error", "Failed to update settings.");
         }
 
-        response.sendRedirect("settings.jsp");
+        response.sendRedirect(request.getContextPath() + "/view/settings");
     }
 }

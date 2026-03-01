@@ -62,7 +62,7 @@ public class ReservationController extends HttpServlet {
             String checkInStr = request.getParameter("check_in");
             String checkOutStr = request.getParameter("check_out");
 
-            String errorPage = isPublic ? "/booking.jsp" : "/reservation.jsp";
+            String errorPage = isPublic ? "/WEB-INF/views/public/booking.jsp" : "/WEB-INF/views/user/reservation.jsp";
 
             if (guestName == null || guestName.isEmpty() || roomType == null ||
                     checkInStr == null || checkOutStr == null) {
@@ -145,9 +145,11 @@ public class ReservationController extends HttpServlet {
                     request.setAttribute("nights", nights);
 
                     if (isPublic) {
-                        request.getRequestDispatcher("/booking-success.jsp").forward(request, response);
+                        request.getRequestDispatcher("/WEB-INF/views/public/booking-success.jsp").forward(request,
+                                response);
                     } else {
-                        request.getRequestDispatcher("/reservations-list.jsp").forward(request, response);
+                        request.getRequestDispatcher("/WEB-INF/views/user/reservations-list.jsp").forward(request,
+                                response);
                     }
                 }
                 rs.close();
@@ -158,7 +160,9 @@ public class ReservationController extends HttpServlet {
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("error", "Error creating reservation: " + e.getMessage());
-            request.getRequestDispatcher(isPublic ? "/booking.jsp" : "/reservation.jsp").forward(request, response);
+            request.getRequestDispatcher(
+                    isPublic ? "/WEB-INF/views/public/booking.jsp" : "/WEB-INF/views/user/reservation.jsp")
+                    .forward(request, response);
         }
     }
 
@@ -196,12 +200,12 @@ public class ReservationController extends HttpServlet {
             conn.close();
 
             request.setAttribute("success", "Reservation updated successfully!");
-            request.getRequestDispatcher("/reservations-list.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/views/user/reservations-list.jsp").forward(request, response);
 
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("error", "Error updating reservation: " + e.getMessage());
-            request.getRequestDispatcher("/reservations-list.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/views/user/reservations-list.jsp").forward(request, response);
         }
     }
 
@@ -228,12 +232,12 @@ public class ReservationController extends HttpServlet {
             conn.close();
 
             request.setAttribute("success", "Reservation deleted successfully!");
-            request.getRequestDispatcher("/reservations-list.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/views/user/reservations-list.jsp").forward(request, response);
 
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("error", "Error deleting reservation: " + e.getMessage());
-            request.getRequestDispatcher("/reservations-list.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/views/user/reservations-list.jsp").forward(request, response);
         }
     }
 
@@ -252,11 +256,11 @@ public class ReservationController extends HttpServlet {
             pst.close();
             conn.close();
 
-            response.sendRedirect("reservation-details.jsp?id=" + resId);
+            response.sendRedirect(request.getContextPath() + "/view/reservation-details?id=" + resId);
 
         } catch (Exception e) {
             e.printStackTrace();
-            response.sendRedirect("reservations-list.jsp?error=Error updating status");
+            response.sendRedirect(request.getContextPath() + "/view/reservations-list?error=Error updating status");
         }
     }
 }

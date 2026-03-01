@@ -17,7 +17,7 @@
 
     <body class="bg-light">
 
-        <jsp:include page="public-navbar.jsp" />
+        <jsp:include page="/WEB-INF/views/shared/public-navbar.jsp" />
 
         <div class="container py-5">
             <div class="row justify-content-center">
@@ -50,7 +50,7 @@
                             <p class="small text-muted mb-4">A confirmation email has been sent to your address.</p>
 
                             <div class="d-grid gap-2">
-                                <a href="home.jsp" class="btn btn-primary btn-lg">Return to Home</a>
+                                <a href="${pageContext.request.contextPath}/view/home" class="btn btn-primary btn-lg">Return to Home</a>
                             </div>
                         </div>
                     </div>

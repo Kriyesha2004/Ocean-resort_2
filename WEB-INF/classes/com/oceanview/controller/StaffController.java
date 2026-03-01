@@ -27,7 +27,7 @@ public class StaffController extends HttpServlet {
 
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("user_id") == null) {
-            response.sendRedirect("index.jsp");
+            response.sendRedirect(request.getContextPath() + "/index.jsp");
             return;
         }
 
@@ -42,7 +42,7 @@ public class StaffController extends HttpServlet {
 
         String action = request.getParameter("action");
         if (action == null) {
-            response.sendRedirect("admin-staff.jsp?error=Invalid action");
+            response.sendRedirect(request.getContextPath() + "/view/admin-staff?error=Invalid action");
             return;
         }
 
@@ -57,7 +57,7 @@ public class StaffController extends HttpServlet {
                 deleteUser(request, response);
                 break;
             default:
-                response.sendRedirect("admin-staff.jsp?error=Unknown action");
+                response.sendRedirect(request.getContextPath() + "/view/admin-staff?error=Unknown action");
         }
     }
 
@@ -74,9 +74,9 @@ public class StaffController extends HttpServlet {
         user.setPassword(password); // In real app, hash this!
 
         if (userDAO.addUser(user)) {
-            response.sendRedirect("admin-staff.jsp?success=Staff added successfully");
+            response.sendRedirect(request.getContextPath() + "/view/admin-staff?success=Staff added successfully");
         } else {
-            response.sendRedirect("admin-staff.jsp?error=Failed to add staff");
+            response.sendRedirect(request.getContextPath() + "/view/admin-staff?error=Failed to add staff");
         }
     }
 
@@ -95,9 +95,9 @@ public class StaffController extends HttpServlet {
         user.setPassword(password);
 
         if (userDAO.updateUser(user)) {
-            response.sendRedirect("admin-staff.jsp?success=Staff updated successfully");
+            response.sendRedirect(request.getContextPath() + "/view/admin-staff?success=Staff updated successfully");
         } else {
-            response.sendRedirect("admin-staff.jsp?error=Failed to update staff");
+            response.sendRedirect(request.getContextPath() + "/view/admin-staff?error=Failed to update staff");
         }
     }
 
@@ -107,14 +107,14 @@ public class StaffController extends HttpServlet {
         // Prevent deleting self
         int currentUserId = (int) request.getSession().getAttribute("user_id");
         if (userId == currentUserId) {
-            response.sendRedirect("admin-staff.jsp?error=Cannot delete yourself");
+            response.sendRedirect(request.getContextPath() + "/view/admin-staff?error=Cannot delete yourself");
             return;
         }
 
         if (userDAO.deleteUser(userId)) {
-            response.sendRedirect("admin-staff.jsp?success=Staff deleted successfully");
+            response.sendRedirect(request.getContextPath() + "/view/admin-staff?success=Staff deleted successfully");
         } else {
-            response.sendRedirect("admin-staff.jsp?error=Failed to delete staff");
+            response.sendRedirect(request.getContextPath() + "/view/admin-staff?error=Failed to delete staff");
         }
     }
 }

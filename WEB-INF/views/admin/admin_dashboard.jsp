@@ -1,31 +1,32 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
     <%@ page import="java.sql.*" %>
         <%@ page import="com.oceanview.util.DBConnection" %>
-            <% if (session.getAttribute("user_id")==null) { response.sendRedirect("index.jsp"); return; } %>
+            <% if (session.getAttribute("user_id")==null) { response.sendRedirect(request.getContextPath() + "/index.jsp"); return; } %>
                 <!DOCTYPE html>
                 <html>
 
                 <head>
                     <meta charset="UTF-8">
                     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                    <title>Dashboard - Ocean View Resort</title>
+                    <title>Admin Dashboard - Ocean View Resort</title>
                     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
                         rel="stylesheet">
-                    <link rel="stylesheet" href="css/style.css">
-                    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css' rel='stylesheet' />
-                    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js'></script>
-
-
+                    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
+                    <script>
+                        setTimeout(function () {
+                            window.location.reload();
+                        }, 30000);
+                    </script>
                 </head>
 
                 <body>
-                    <%@ include file="navbar.jsp" %>
+                    <%@ include file="/WEB-INF/views/shared/admin_navbar.jsp" %>
 
                         <div class="container-fluid py-4">
                             <div class="row mb-4">
                                 <div class="col-md-12">
                                     <h1 class="display-6 text-primary">
-                                        <i class="bi bi-speedometer2"></i> Dashboard
+                                        <i class="bi bi-speedometer2"></i> Admin Dashboard
                                     </h1>
                                     <p class="text-muted">Welcome, <%= session.getAttribute("full_name") %>!
                                             <span id="notifStatus" class="badge bg-secondary" style="cursor:pointer;"
@@ -114,12 +115,12 @@
                                                     <h2 class="text-info mb-0">
                                                         $
                                                         <% try { Connection conn=DBConnection.getConnection(); String
-                                                            sql="SELECT SUM(total_bill) as revenue FROM reservations WHERE status = 'Checked-Out' AND MONTH(created_at) = MONTH(NOW()) AND YEAR(created_at) = YEAR(NOW())"
+                                                            sql="SELECT SUM(total_bill) as revenue FROM reservations WHERE MONTH(created_at) = MONTH(NOW()) AND YEAR(created_at) = YEAR(NOW())"
                                                             ; PreparedStatement pst=conn.prepareStatement(sql);
                                                             ResultSet rs=pst.executeQuery(); if (rs.next()) { Double
                                                             revenue=rs.getDouble("revenue");
                                                             out.print(String.format("%.2f", revenue !=null ? revenue :
-                                                            0.0)); } rs.close(); pst.close(); } catch (Exception e) {
+                                                            0)); } rs.close(); pst.close(); } catch (Exception e) {
                                                             out.print("0.00"); } %>
                                                     </h2>
                                                 </div>
@@ -131,81 +132,32 @@
                             </div>
 
                             <div class="row g-4 mt-3">
+                                <!-- Quick Actions -->
                                 <div class="col-md-12">
-                                    <div
-                                        class="card-header bg-light border-bottom d-flex justify-content-between align-items-center">
-                                        <h5 class="card-title mb-0">Reservation Calendar</h5>
-                                        <div class="small">
-                                            <span class="badge"
-                                                style="background-color: #198754;">Booked/Confirmed</span>
-                                            <span class="badge"
-                                                style="background-color: #ffc107; color: #000;">Pending</span>
-                                            <span class="badge" style="background-color: #0dcaf0;">Checked-In</span>
-                                            <span class="badge" style="background-color: #dc3545;">Cancelled</span>
+                                    <div class="card border-0 shadow-sm">
+                                        <div class="card-header bg-light border-bottom">
+                                            <h5 class="card-title mb-0">Quick Actions</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <a href="${pageContext.request.contextPath}/view/reservation" class="btn btn-primary me-2 mb-2">
+                                                <i class="bi bi-plus-circle"></i> New Reservation
+                                            </a>
+                                            <a href="${pageContext.request.contextPath}/view/reservations-list" class="btn btn-secondary me-2 mb-2">
+                                                <i class="bi bi-list-ul"></i> View Reservations
+                                            </a>
+                                            <a href="${pageContext.request.contextPath}/view/reports" class="btn btn-info me-2 mb-2">
+                                                <i class="bi bi-file-earmark-pdf"></i> Reports
+                                            </a>
                                         </div>
                                     </div>
-                                    <div class="card-body">
-                                        <div id='calendar'></div>
-                                    </div>
                                 </div>
                             </div>
-                        </div>
-
-
-
-                        <div class="row g-4 mt-3">
-                            <!-- Quick Actions -->
-                            <div class="col-md-12">
-                                <div class="card border-0 shadow-sm">
-                                    <div class="card-header bg-light border-bottom">
-                                        <h5 class="card-title mb-0">Quick Actions</h5>
-                                    </div>
-                                    <div class="card-body">
-                                        <a href="reservation.jsp" class="btn btn-primary me-2 mb-2">
-                                            <i class="bi bi-plus-circle"></i> New Reservation
-                                        </a>
-                                        <a href="reservations-list.jsp" class="btn btn-secondary me-2 mb-2">
-                                            <i class="bi bi-list-ul"></i> View Reservations
-                                        </a>
-                                        <a href="reports.jsp" class="btn btn-info me-2 mb-2">
-                                            <i class="bi bi-file-earmark-pdf"></i> Reports
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                         </div>
 
                         <script
                             src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
                         <script>
-                            document.addEventListener('DOMContentLoaded', function () {
-                                var calendarEl = document.getElementById('calendar');
-                                if (calendarEl) {
-                                    var calendar = new FullCalendar.Calendar(calendarEl, {
-                                        initialView: 'dayGridMonth',
-                                        headerToolbar: {
-                                            left: 'prev,next today',
-                                            center: 'title',
-                                            right: 'dayGridMonth,timeGridWeek,listMonth'
-                                        },
-                                        themeSystem: 'bootstrap5',
-                                        events: '<%= request.getContextPath() %>/api/calendar',
-                                        eventSourceFailure: function (error) {
-                                            console.error("FullCalendar error:", error);
-                                            alert("Failed to load calendar events. Please check the server logs.");
-                                        },
-                                        loading: function (isLoading) {
-                                            if (isLoading) {
-                                                console.log("Loading calendar events...");
-                                            }
-                                        }
-                                    });
-                                    calendar.render();
-                                }
-                            });
-
                             document.addEventListener('DOMContentLoaded', function () {
                                 // Check if browser notifications are enabled in session settings
                                 // Note: This relies on the JSP rendering 'true' or 'false' directly into the JS code.

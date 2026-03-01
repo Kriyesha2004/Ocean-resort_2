@@ -25,7 +25,7 @@ public class MessageController extends HttpServlet {
 
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("user_id") == null) {
-            response.sendRedirect("index.jsp");
+            response.sendRedirect(request.getContextPath() + "/index.jsp");
             return;
         }
 
@@ -34,7 +34,8 @@ public class MessageController extends HttpServlet {
         String receiverIdStr = request.getParameter("receiver_id");
 
         if (content == null || content.trim().isEmpty()) {
-            response.sendRedirect("admin-notices.jsp?error=Message content cannot be empty");
+            response.sendRedirect(
+                    request.getContextPath() + "/view/admin-notices?error=Message content cannot be empty");
             return;
         }
 
@@ -48,9 +49,9 @@ public class MessageController extends HttpServlet {
         }
 
         if (messageDAO.createMessage(senderId, receiverId, content)) {
-            response.sendRedirect("admin-notices.jsp?success=Message sent successfully");
+            response.sendRedirect(request.getContextPath() + "/view/admin-notices?success=Message sent successfully");
         } else {
-            response.sendRedirect("admin-notices.jsp?error=Failed to send message");
+            response.sendRedirect(request.getContextPath() + "/view/admin-notices?error=Failed to send message");
         }
     }
 }

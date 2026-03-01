@@ -1,7 +1,7 @@
-﻿<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.sql.*" %>
 <%@ page import="com.oceanview.util.DBConnection" %>
-<% if (session.getAttribute("user_id") == null) { response.sendRedirect("index.jsp"); return; } %>
+<% if (session.getAttribute("user_id") == null) { response.sendRedirect(request.getContextPath() + "/index.jsp"); return; } %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,17 +10,17 @@
     <title>Reservations - Ocean View Resort</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 </head>
 <body>
-    <%@ include file="navbar.jsp" %>
+    <%@ include file="/WEB-INF/views/shared/navbar.jsp" %>
     <div class="container-fluid py-4">
         <div class="row mb-4">
             <div class="col-md-12">
                 <div class="d-flex justify-content-between align-items-center">
                     <h1 class="display-6 text-primary">All Reservations</h1>
                     <div class="d-flex gap-2">
-                        <form action="reservations-list.jsp" method="GET" class="d-flex">
+                        <form action="${pageContext.request.contextPath}/view/reservations-list" method="GET" class="d-flex">
                             <% 
                                 String search = request.getParameter("search"); 
                                 String safeSearch = (search != null) ? search.replace("\"", "&quot;") : ""; 
@@ -28,10 +28,10 @@
                             <input type="text" name="search" class="form-control me-2" placeholder="Search guest name..." value="<%= safeSearch %>">
                             <button type="submit" class="btn btn-outline-primary">Search</button>
                             <% if(request.getParameter("search") != null && !request.getParameter("search").trim().isEmpty()) { %>
-                                <a href="reservations-list.jsp" class="btn btn-outline-secondary ms-2">Clear</a>
+                                <a href="${pageContext.request.contextPath}/view/reservations-list" class="btn btn-outline-secondary ms-2">Clear</a>
                             <% } %>
                         </form>
-                        <a href="reservation.jsp" class="btn btn-primary">
+                        <a href="${pageContext.request.contextPath}/view/reservation" class="btn btn-primary">
                             <i class="bi bi-plus-circle"></i> New Reservation
                         </a>
                     </div>
@@ -107,10 +107,10 @@
                                 <td><strong>$<%= String.format("%.2f", bill) %></strong></td>
                                 <td><span class="badge bg-<%= statusBadge %>"><%= status %></span></td>
                                 <td>
-                                    <a href="reservation-details.jsp?id=<%= resId %>" class="btn btn-sm btn-info" title="View Details">
+                                    <a href="${pageContext.request.contextPath}/view/reservation-details?id=<%= resId %>" class="btn btn-sm btn-info" title="View Details">
                                         <i class="bi bi-eye"></i>
                                     </a>
-                                    <a href="reservation-edit.jsp?id=<%= resId %>" class="btn btn-sm btn-warning" title="Edit">
+                                    <a href="${pageContext.request.contextPath}/view/reservation-edit?id=<%= resId %>" class="btn btn-sm btn-warning" title="Edit">
                                         <i class="bi bi-pencil"></i>
                                     </a>
                                     <form action="reservation" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this reservation?');">

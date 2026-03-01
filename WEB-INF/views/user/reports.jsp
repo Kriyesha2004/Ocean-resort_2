@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-    <% if (session.getAttribute("user_id")==null) { response.sendRedirect("index.jsp"); return; } %>
+    <% if (session.getAttribute("user_id")==null) { response.sendRedirect(request.getContextPath() + "/index.jsp"); return; } %>
         <!DOCTYPE html>
         <html>
 
@@ -8,7 +8,7 @@
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>Reports - Ocean View Resort</title>
             <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-            <link rel="stylesheet" href="css/style.css">
+            <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 
             <!-- React & ReactDOM -->
             <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
@@ -30,7 +30,7 @@
 
         <body>
             <% Boolean isAdmin=(Boolean) session.getAttribute("is_admin"); String navbarFile=(isAdmin !=null && isAdmin)
-                ? "admin_navbar.jsp" : "navbar.jsp" ; %>
+                ? "/WEB-INF/views/shared/admin_navbar.jsp" : "/WEB-INF/views/shared/navbar.jsp" ; %>
                 <jsp:include page="<%= navbarFile %>" />
 
                 <div id="root" class="container-fluid py-4">
@@ -43,7 +43,7 @@
                 </div>
 
                 <!-- Main Application Logic -->
-                <script type="text/babel" src="js/reports.js"></script>
+                <script type="text/babel" src="${pageContext.request.contextPath}/js/reports.js"></script>
 
                 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
         </body>

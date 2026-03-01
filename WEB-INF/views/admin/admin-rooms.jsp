@@ -4,7 +4,7 @@
             <%@ page import="com.oceanview.model.RoomType" %>
                 <%@ page import="com.oceanview.dao.RoomDAO" %>
                     <%@ page import="com.oceanview.dao.RoomTypeDAO" %>
-                        <% if (session.getAttribute("user_id")==null) { response.sendRedirect("index.jsp"); return; }
+                        <% if (session.getAttribute("user_id")==null) { response.sendRedirect(request.getContextPath() + "/index.jsp"); return; }
                             RoomDAO roomDAO=new RoomDAO(); List<Room> rooms = roomDAO.getAllRooms();
                             RoomTypeDAO typeDAO = new RoomTypeDAO();
                             List<RoomType> roomTypes = typeDAO.getAllRoomTypes();
@@ -20,11 +20,11 @@
                                         rel="stylesheet">
                                     <link rel="stylesheet"
                                         href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-                                    <link rel="stylesheet" href="css/style.css">
+                                    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
                                 </head>
 
                                 <body>
-                                    <%@ include file="admin_navbar.jsp" %>
+                                    <%@ include file="/WEB-INF/views/shared/admin_navbar.jsp" %>
 
                                         <div class="container py-5">
                                             <% if(session.getAttribute("successMsg") !=null) { %>

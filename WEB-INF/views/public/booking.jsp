@@ -8,12 +8,12 @@
         <title>Book Your Stay - Ocean View Resort</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
-        <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
     </head>
 
     <body class="booking-bg">
 
-        <jsp:include page="public-navbar.jsp" />
+        <jsp:include page="/WEB-INF/views/shared/public-navbar.jsp" />
 
         <div class="container py-5">
             <div class="row justify-content-center">
@@ -130,7 +130,7 @@
                                             <button type="submit" class="btn btn-primary btn-lg py-3 fw-bold shadow-sm">
                                                 Confirm Booking
                                             </button>
-                                            <a href="home.jsp" class="btn btn-outline-secondary">Cancel</a>
+                                            <a href="${pageContext.request.contextPath}/view/home" class="btn btn-outline-secondary">Cancel</a>
                                         </div>
                                     </form>
                         </div>
@@ -140,7 +140,7 @@
         </div>
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="js/reservation.js"></script>
+        <script src="${pageContext.request.contextPath}/js/reservation.js"></script>
     </body>
 
     </html>

@@ -14,7 +14,7 @@
         <link
             href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lato:wght@300;400;700&display=swap"
             rel="stylesheet">
-        <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
         <style>
             /* Minimal overrides that might be needed, currently empty as we moved to style.css */
         </style>
@@ -23,7 +23,7 @@
     <body>
 
         <!-- Navigation -->
-        <jsp:include page="public-navbar.jsp" />
+        <jsp:include page="/WEB-INF/views/shared/public-navbar.jsp" />
 
         <!-- Hero Section -->
         <header class="hero-section">
@@ -138,7 +138,7 @@
                                     <li class="me-3 mb-2"><i class="bi bi-tv me-1"></i> Smart TV</li>
                                     <li class="me-3 mb-2"><i class="bi bi-wind me-1"></i> AC</li>
                                 </ul>
-                                <a href="booking.jsp?room_type=Single"
+                                <a href="${pageContext.request.contextPath}/view/booking?room_type=Single"
                                     class="btn btn-outline-primary w-100 mt-auto">Book Now</a>
                             </div>
                         </div>
@@ -182,7 +182,7 @@
                                     <li class="me-3 mb-2"><i class="bi bi-water me-1"></i> Ocean View</li>
                                     <li class="me-3 mb-2"><i class="bi bi-cup-hot me-1"></i> Breakfast</li>
                                 </ul>
-                                <a href="booking.jsp?room_type=Double"
+                                <a href="${pageContext.request.contextPath}/view/booking?room_type=Double"
                                     class="btn btn-primary w-100 mt-auto shadow-sm">Book This Room</a>
                             </div>
                         </div>
@@ -224,7 +224,7 @@
                                     <li class="me-3 mb-2"><i class="bi bi-droplet-fill me-1"></i> Jacuzzi</li>
                                     <li class="me-3 mb-2"><i class="bi bi-person-fill me-1"></i> Butler</li>
                                 </ul>
-                                <a href="booking.jsp?room_type=Luxury"
+                                <a href="${pageContext.request.contextPath}/view/booking?room_type=Luxury"
                                     class="btn btn-outline-primary w-100 mt-auto">Book Now</a>
                             </div>
                         </div>
@@ -323,7 +323,7 @@
         <!-- Bootstrap JS -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
         <!-- Custom JS for Modal -->
-        <script src="js/home.js"></script>
+        <script src="${pageContext.request.contextPath}/js/home.js"></script>
     </body>
 
     </html>

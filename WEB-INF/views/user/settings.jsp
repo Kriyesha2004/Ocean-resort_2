@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-    <% if (session.getAttribute("user_id")==null) { response.sendRedirect("index.jsp"); return; } %>
+    <% if (session.getAttribute("user_id")==null) { response.sendRedirect(request.getContextPath() + "/index.jsp"); return; } %>
         <!DOCTYPE html>
         <html lang="en">
 
@@ -12,13 +12,13 @@
             <!-- Bootstrap Icons -->
             <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
             <!-- Custom CSS -->
-            <link rel="stylesheet" href="css/style.css">
+            <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
         </head>
 
         <body class="bg-light">
 
             <!-- Navigation -->
-            <jsp:include page="navbar.jsp" />
+            <jsp:include page="/WEB-INF/views/shared/navbar.jsp" />
 
             <div class="container mt-5">
                 <div class="row justify-content-center">
@@ -111,7 +111,7 @@
                                                         <button type="submit" class="btn btn-primary">
                                                             Save Changes
                                                         </button>
-                                                        <a href="dashboard.jsp"
+                                                        <a href="${pageContext.request.contextPath}/view/dashboard"
                                                             class="btn btn-outline-secondary">Cancel</a>
                                                     </div>
 

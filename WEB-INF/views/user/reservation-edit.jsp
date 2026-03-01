@@ -1,9 +1,9 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
     <%@ page import="java.sql.*" %>
         <%@ page import="com.oceanview.util.DBConnection" %>
-            <% if (session.getAttribute("user_id")==null) { response.sendRedirect("index.jsp"); return; } String
+            <% if (session.getAttribute("user_id")==null) { response.sendRedirect(request.getContextPath() + "/index.jsp"); return; } String
                 resIdParam=request.getParameter("id"); if (resIdParam==null || resIdParam.isEmpty()) {
-                response.sendRedirect("reservations-list.jsp"); return; } int resId=Integer.parseInt(resIdParam);
+                response.sendRedirect(request.getContextPath() + "/view/reservations-list"); return; } int resId=Integer.parseInt(resIdParam);
                 Connection conn=null; PreparedStatement pst=null; ResultSet rs=null; String guestName="" ; String
                 roomType="" ; String checkIn="" ; String checkOut="" ; String address="" ; String contactNo="" ; String
                 email="" ; try { conn=DBConnection.getConnection(); String
@@ -12,7 +12,7 @@
                 roomType=rs.getString("room_type"); checkIn=rs.getString("check_in");
                 checkOut=rs.getString("check_out"); address=rs.getString("address");
                 contactNo=rs.getString("contact_no"); email=rs.getString("email"); } else {
-                response.sendRedirect("reservations-list.jsp?error=Reservation not found"); return; } } catch (Exception
+                response.sendRedirect(request.getContextPath() + "/view/reservations-list?error=Reservation not found"); return; } } catch (Exception
                 e) { e.printStackTrace(); } finally { if (rs !=null) try { rs.close(); } catch (SQLException e) {} if
                 (pst !=null) try { pst.close(); } catch (SQLException e) {} if (conn !=null) try { conn.close(); } catch
                 (SQLException e) {} } %>
@@ -25,11 +25,11 @@
                     <title>Edit Reservation - Ocean View Resort</title>
                     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
                         rel="stylesheet">
-                    <link rel="stylesheet" href="css/style.css">
+                    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
                 </head>
 
                 <body>
-                    <%@ include file="navbar.jsp" %>
+                    <%@ include file="/WEB-INF/views/shared/navbar.jsp" %>
 
                         <div class="container py-5">
                             <div class="row justify-content-center">
@@ -97,7 +97,7 @@
                                                 </div>
 
                                                 <div class="d-flex justify-content-between mt-4">
-                                                    <a href="reservations-list.jsp" class="btn btn-secondary">Cancel</a>
+                                                    <a href="${pageContext.request.contextPath}/view/reservations-list" class="btn btn-secondary">Cancel</a>
                                                     <button type="submit" class="btn btn-primary">Update
                                                         Reservation</button>
                                                 </div>
