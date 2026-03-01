@@ -23,31 +23,19 @@ jobs:
       with:
         java-version: ${{ matrix.java-version }}
         distribution: 'temurin'
+        cache: maven
     
-    - name: Create build directory
-      run: mkdir -p target/classes
-    
-    - name: Compile Java classes from src/main/java
-      run: |
-        javac -d target/classes \
-          -source 11 -target 11 \
-          src/main/java/com/oceanview/model/*.java \
-          src/main/java/com/oceanview/util/*.java \
-          src/main/java/com/oceanview/dao/*.java \
-          src/main/java/com/oceanview/dto/*.java \
-          src/main/java/com/oceanview/service/*.java \
-          src/main/java/com/oceanview/controller/*.java
+    - name: Compile with Maven
+      run: mvn clean compile
     
     - name: Verify compilation
       run: |
-        echo "✓ MVC Controller classes compiled"
-        ls -la target/classes/com/oceanview/controller/
+        echo "✓ MVC Application compiled successfully"
         echo "✓ Total compiled classes:"
         find target/classes -name "*.class" | wc -l
     
     - name: Run Unit Tests
-      run: |
-        mvn clean test --file pom.xml
+      run: mvn test
       continue-on-error: true
     
     - name: Publish Test Results
@@ -59,22 +47,13 @@ jobs:
         retention-days: 30
     
     - name: Package WAR artifact
-      run: |
-        cd ${{ github.workspace }}
-        zip -r Ocean-resort_2.war \
-          *.jsp \
-          css/ \
-          js/ \
-          sql/ \
-          docs/ \
-          WEB-INF/ \
-          -x "*.class"
+      run: mvn package -DskipTests
     
     - name: Upload WAR artifact
       uses: actions/upload-artifact@v4
       with:
         name: ocean-resort-app
-        path: Ocean-resort_2.war
+        path: target/*.war
         retention-days: 30
     
     - name: Build status report
