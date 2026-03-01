@@ -49,9 +49,8 @@
                                                             <div
                                                                 class="d-flex justify-content-between align-items-center mb-4">
                                                                 <h1>Room Management</h1>
-                                                                <button class="btn btn-primary" disabled>+ Add Room
-                                                                    (Coming
-                                                                    Soon)</button>
+                                                                <button class="btn btn-primary" data-bs-toggle="modal"
+                                                                    data-bs-target="#addRoomModal">+ Add Room</button>
                                                             </div>
 
                                                             <!-- Tabs for Rooms and Categories -->
@@ -129,6 +128,13 @@
                                                                                                         <i
                                                                                                             class="bi bi-pencil"></i>
                                                                                                         Edit</button>
+                                                                                                    <button
+                                                                                                        class="btn btn-sm btn-outline-danger delete-room-btn"
+                                                                                                        data-id="<%= room.getRoomId() %>"
+                                                                                                        data-number="<%= room.getRoomNumber() %>">
+                                                                                                        <i
+                                                                                                            class="bi bi-trash"></i>
+                                                                                                        Delete</button>
                                                                                                 </td>
                                                                                             </tr>
                                                                                             <% } %>
@@ -306,11 +312,68 @@
                                             </div>
                                         </div>
 
+                                        <!-- Add Room Modal -->
+                                        <div class="modal fade" id="addRoomModal" tabindex="-1">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <form action="${pageContext.request.contextPath}/add-room"
+                                                        method="POST">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title">Add New Room</h5>
+                                                            <button type="button" class="btn-close"
+                                                                data-bs-dismiss="modal"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <div class="mb-3">
+                                                                <label class="form-label">Room Number</label>
+                                                                <input type="text" name="roomNumber"
+                                                                    class="form-control" required
+                                                                    placeholder="e.g. 101">
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label class="form-label">Room Type</label>
+                                                                <select name="roomType" class="form-control" required>
+                                                                    <option value="" disabled selected>Select Type
+                                                                    </option>
+                                                                    <% for(RoomType rt : roomTypes) { %>
+                                                                        <option value="<%= rt.getTypeName() %>">
+                                                                            <%= rt.getTypeName() %>
+                                                                        </option>
+                                                                        <% } %>
+                                                                </select>
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label class="form-label">Initial Status</label>
+                                                                <select name="status" class="form-control">
+                                                                    <option value="Available">Available</option>
+                                                                    <option value="Maintenance">Maintenance</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary"
+                                                                data-bs-dismiss="modal">Cancel</button>
+                                                            <button type="submit" class="btn btn-primary">Add
+                                                                Room</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Delete Room Form (Hidden) -->
+                                        <form id="deleteRoomForm"
+                                            action="${pageContext.request.contextPath}/delete-room" method="POST"
+                                            style="display:none;">
+                                            <input type="hidden" name="roomId" id="delete_roomId">
+                                        </form>
+
                                         <script
                                             src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
                                         <script>
                                             const roomModal = new bootstrap.Modal(document.getElementById('editRoomModal'));
                                             const typeModal = new bootstrap.Modal(document.getElementById('editTypeModal'));
+                                            const addModal = new bootstrap.Modal(document.getElementById('addRoomModal'));
 
                                             document.querySelectorAll('.edit-room-btn').forEach(btn => {
                                                 btn.addEventListener('click', () => {
@@ -320,6 +383,16 @@
                                                     document.getElementById('edit_roomType').value = data.type;
                                                     document.getElementById('edit_status').value = data.status;
                                                     roomModal.show();
+                                                });
+                                            });
+
+                                            document.querySelectorAll('.delete-room-btn').forEach(btn => {
+                                                btn.addEventListener('click', () => {
+                                                    const data = btn.dataset;
+                                                    if (confirm(`Are you sure you want to delete room ${data.number}?`)) {
+                                                        document.getElementById('delete_roomId').value = data.id;
+                                                        document.getElementById('deleteRoomForm').submit();
+                                                    }
                                                 });
                                             });
 

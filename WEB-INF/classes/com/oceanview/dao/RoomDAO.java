@@ -94,5 +94,28 @@ public class RoomDAO {
         pst.setInt(4, room.getRoomId());
         pst.executeUpdate();
         pst.close();
+        conn.close();
+    }
+
+    public void addRoom(Room room) throws Exception {
+        Connection conn = DBConnection.getConnection();
+        String query = "INSERT INTO rooms (room_number, room_type, status) VALUES (?, ?, ?)";
+        PreparedStatement pst = conn.prepareStatement(query);
+        pst.setString(1, room.getRoomNumber());
+        pst.setString(2, room.getRoomType());
+        pst.setString(3, room.getStatus());
+        pst.executeUpdate();
+        pst.close();
+        conn.close();
+    }
+
+    public void deleteRoom(int roomId) throws Exception {
+        Connection conn = DBConnection.getConnection();
+        String query = "DELETE FROM rooms WHERE room_id = ?";
+        PreparedStatement pst = conn.prepareStatement(query);
+        pst.setInt(1, roomId);
+        pst.executeUpdate();
+        pst.close();
+        conn.close();
     }
 }
