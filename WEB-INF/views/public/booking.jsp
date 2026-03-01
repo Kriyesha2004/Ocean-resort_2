@@ -39,8 +39,8 @@
                                 </div>
                                 <% } %>
 
-                                    <form action="reservation" method="POST" name="reservationForm"
-                                        onsubmit="return validateReservationForm()">
+                                    <form action="${pageContext.request.contextPath}/reservation" method="POST"
+                                        name="reservationForm" onsubmit="return validateReservationForm()">
                                         <input type="hidden" name="action" value="public_booking">
 
                                         <!-- Guest Information -->
@@ -130,7 +130,8 @@
                                             <button type="submit" class="btn btn-primary btn-lg py-3 fw-bold shadow-sm">
                                                 Confirm Booking
                                             </button>
-                                            <a href="${pageContext.request.contextPath}/view/home" class="btn btn-outline-secondary">Cancel</a>
+                                            <a href="${pageContext.request.contextPath}/view/home"
+                                                class="btn btn-outline-secondary">Cancel</a>
                                         </div>
                                     </form>
                         </div>

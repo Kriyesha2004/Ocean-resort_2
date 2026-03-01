@@ -4,8 +4,9 @@
             <%@ page import="com.oceanview.model.RoomType" %>
                 <%@ page import="com.oceanview.dao.RoomDAO" %>
                     <%@ page import="com.oceanview.dao.RoomTypeDAO" %>
-                        <% if (session.getAttribute("user_id")==null) { response.sendRedirect(request.getContextPath() + "/index.jsp"); return; }
-                            RoomDAO roomDAO=new RoomDAO(); List<Room> rooms = roomDAO.getAllRooms();
+                        <% if (session.getAttribute("user_id")==null) { response.sendRedirect(request.getContextPath()
+                            + "/index.jsp" ); return; } RoomDAO roomDAO=new RoomDAO(); List<Room> rooms =
+                            roomDAO.getAllRooms();
                             RoomTypeDAO typeDAO = new RoomTypeDAO();
                             List<RoomType> roomTypes = typeDAO.getAllRoomTypes();
                                 %>
@@ -205,7 +206,8 @@
                                         <div class="modal fade" id="editRoomModal" tabindex="-1">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
-                                                    <form action="update-room" method="POST">
+                                                    <form action="${pageContext.request.contextPath}/update-room"
+                                                        method="POST">
                                                         <div class="modal-header">
                                                             <h5 class="modal-title">Edit Room</h5>
                                                             <button type="button" class="btn-close"
@@ -254,7 +256,8 @@
                                         <div class="modal fade" id="editTypeModal" tabindex="-1">
                                             <div class="modal-dialog modal-lg">
                                                 <div class="modal-content">
-                                                    <form action="update-room-type" method="POST">
+                                                    <form action="${pageContext.request.contextPath}/update-room-type"
+                                                        method="POST">
                                                         <div class="modal-header">
                                                             <h5 class="modal-title">Manage Room Category: <span
                                                                     id="editType_name_display"></span></h5>

@@ -1,21 +1,21 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
     <%@ page import="java.sql.*" %>
         <%@ page import="com.oceanview.util.DBConnection" %>
-            <% if (session.getAttribute("user_id")==null) { response.sendRedirect(request.getContextPath() + "/index.jsp"); return; } String
-                resIdParam=request.getParameter("id"); if (resIdParam==null || resIdParam.isEmpty()) {
-                response.sendRedirect(request.getContextPath() + "/view/reservations-list"); return; } int resId=Integer.parseInt(resIdParam);
-                Connection conn=null; PreparedStatement pst=null; ResultSet rs=null; String guestName="" ; String
-                roomType="" ; String checkIn="" ; String checkOut="" ; String address="" ; String contactNo="" ; String
-                email="" ; try { conn=DBConnection.getConnection(); String
-                query="SELECT * FROM reservations WHERE res_id = ?" ; pst=conn.prepareStatement(query); pst.setInt(1,
-                resId); rs=pst.executeQuery(); if (rs.next()) { guestName=rs.getString("guest_name");
+            <% if (session.getAttribute("user_id")==null) { response.sendRedirect(request.getContextPath()
+                + "/index.jsp" ); return; } String resIdParam=request.getParameter("id"); if (resIdParam==null ||
+                resIdParam.isEmpty()) { response.sendRedirect(request.getContextPath() + "/view/reservations-list" );
+                return; } int resId=Integer.parseInt(resIdParam); Connection conn=null; PreparedStatement pst=null;
+                ResultSet rs=null; String guestName="" ; String roomType="" ; String checkIn="" ; String checkOut="" ;
+                String address="" ; String contactNo="" ; String email="" ; try { conn=DBConnection.getConnection();
+                String query="SELECT * FROM reservations WHERE res_id = ?" ; pst=conn.prepareStatement(query);
+                pst.setInt(1, resId); rs=pst.executeQuery(); if (rs.next()) { guestName=rs.getString("guest_name");
                 roomType=rs.getString("room_type"); checkIn=rs.getString("check_in");
                 checkOut=rs.getString("check_out"); address=rs.getString("address");
                 contactNo=rs.getString("contact_no"); email=rs.getString("email"); } else {
-                response.sendRedirect(request.getContextPath() + "/view/reservations-list?error=Reservation not found"); return; } } catch (Exception
-                e) { e.printStackTrace(); } finally { if (rs !=null) try { rs.close(); } catch (SQLException e) {} if
-                (pst !=null) try { pst.close(); } catch (SQLException e) {} if (conn !=null) try { conn.close(); } catch
-                (SQLException e) {} } %>
+                response.sendRedirect(request.getContextPath() + "/view/reservations-list?error=Reservation not found"
+                ); return; } } catch (Exception e) { e.printStackTrace(); } finally { if (rs !=null) try { rs.close(); }
+                catch (SQLException e) {} if (pst !=null) try { pst.close(); } catch (SQLException e) {} if (conn
+                !=null) try { conn.close(); } catch (SQLException e) {} } %>
                 <!DOCTYPE html>
                 <html>
 
@@ -40,7 +40,7 @@
                                             </h4>
                                         </div>
                                         <div class="card-body">
-                                            <form action="reservation" method="POST">
+                                            <form action="${pageContext.request.contextPath}/reservation" method="POST">
                                                 <input type="hidden" name="action" value="update">
                                                 <input type="hidden" name="id" value="<%= resId %>">
 
@@ -97,7 +97,8 @@
                                                 </div>
 
                                                 <div class="d-flex justify-content-between mt-4">
-                                                    <a href="${pageContext.request.contextPath}/view/reservations-list" class="btn btn-secondary">Cancel</a>
+                                                    <a href="${pageContext.request.contextPath}/view/reservations-list"
+                                                        class="btn btn-secondary">Cancel</a>
                                                     <button type="submit" class="btn btn-primary">Update
                                                         Reservation</button>
                                                 </div>

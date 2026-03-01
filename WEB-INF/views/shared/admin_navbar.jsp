@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-    <% if (session.getAttribute("user_id")==null) { response.sendRedirect(request.getContextPath() + "/index.jsp"); return; } %>
+    <% if (session.getAttribute("user_id")==null) { response.sendRedirect(request.getContextPath() + "/index.jsp" );
+        return; } %>
         <nav class="navbar navbar-expand-lg navbar-dark navbar-custom sticky-top">
             <div class="container-fluid">
                 <a class="navbar-brand fw-bold fs-3" href="${pageContext.request.contextPath}/view/admin-dashboard">
@@ -39,14 +40,17 @@
                             <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0"
                                 style="background: var(--bg-card); backdrop-filter: blur(10px);"
                                 aria-labelledby="userDropdown">
-                                <li><a class="dropdown-item" style="color: var(--text-main);" href="${pageContext.request.contextPath}/view/profile"><i
+                                <li><a class="dropdown-item" style="color: var(--text-main);"
+                                        href="${pageContext.request.contextPath}/view/profile"><i
                                             class="bi bi-person me-2"></i>Profile</a></li>
-                                <li><a class="dropdown-item" style="color: var(--text-main);" href="${pageContext.request.contextPath}/view/settings"><i
+                                <li><a class="dropdown-item" style="color: var(--text-main);"
+                                        href="${pageContext.request.contextPath}/view/settings"><i
                                             class="bi bi-gear me-2"></i>Settings</a></li>
                                 <li>
                                     <hr class="dropdown-divider" style="border-color: var(--border-color);">
                                 </li>
-                                <li><a class="dropdown-item text-danger" href="logout"><i
+                                <li><a class="dropdown-item text-danger"
+                                        href="${pageContext.request.contextPath}/logout"><i
                                             class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
                             </ul>
                         </li>

@@ -1,22 +1,23 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
     <%@ page import="java.sql.*" %>
         <%@ page import="com.oceanview.util.DBConnection" %>
-            <% if (session.getAttribute("user_id")==null) { response.sendRedirect(request.getContextPath() + "/index.jsp"); return; } String
-                resIdParam=request.getParameter("id"); if (resIdParam==null || resIdParam.isEmpty()) {
-                response.sendRedirect(request.getContextPath() + "/view/reservations-list"); return; } int resId=Integer.parseInt(resIdParam);
-                Connection conn=null; PreparedStatement pst=null; ResultSet rs=null; String guestName="" ; String
-                roomType="" ; String checkIn="" ; String checkOut="" ; double totalBill=0.0; String status="" ; String
-                address="" ; String contactNo="" ; String email="" ; Date createdAt=null; try {
-                conn=DBConnection.getConnection(); String query="SELECT * FROM reservations WHERE res_id = ?" ;
-                pst=conn.prepareStatement(query); pst.setInt(1, resId); rs=pst.executeQuery(); if (rs.next()) {
-                guestName=rs.getString("guest_name"); roomType=rs.getString("room_type");
-                checkIn=rs.getString("check_in"); checkOut=rs.getString("check_out");
-                totalBill=rs.getDouble("total_bill"); status=rs.getString("status"); address=rs.getString("address");
-                contactNo=rs.getString("contact_no"); email=rs.getString("email"); createdAt=rs.getDate("created_at"); }
-                else { response.sendRedirect(request.getContextPath() + "/view/reservations-list?error=Reservation not found"); return; } } catch
-                (Exception e) { e.printStackTrace(); } finally { if (rs !=null) try { rs.close(); } catch (SQLException
-                e) {} if (pst !=null) try { pst.close(); } catch (SQLException e) {} if (conn !=null) try {
-                conn.close(); } catch (SQLException e) {} } %>
+            <% if (session.getAttribute("user_id")==null) { response.sendRedirect(request.getContextPath()
+                + "/index.jsp" ); return; } String resIdParam=request.getParameter("id"); if (resIdParam==null ||
+                resIdParam.isEmpty()) { response.sendRedirect(request.getContextPath() + "/view/reservations-list" );
+                return; } int resId=Integer.parseInt(resIdParam); Connection conn=null; PreparedStatement pst=null;
+                ResultSet rs=null; String guestName="" ; String roomType="" ; String checkIn="" ; String checkOut="" ;
+                double totalBill=0.0; String status="" ; String address="" ; String contactNo="" ; String email="" ;
+                Date createdAt=null; try { conn=DBConnection.getConnection(); String
+                query="SELECT * FROM reservations WHERE res_id = ?" ; pst=conn.prepareStatement(query); pst.setInt(1,
+                resId); rs=pst.executeQuery(); if (rs.next()) { guestName=rs.getString("guest_name");
+                roomType=rs.getString("room_type"); checkIn=rs.getString("check_in");
+                checkOut=rs.getString("check_out"); totalBill=rs.getDouble("total_bill"); status=rs.getString("status");
+                address=rs.getString("address"); contactNo=rs.getString("contact_no"); email=rs.getString("email");
+                createdAt=rs.getDate("created_at"); } else { response.sendRedirect(request.getContextPath()
+                + "/view/reservations-list?error=Reservation not found" ); return; } } catch (Exception e) {
+                e.printStackTrace(); } finally { if (rs !=null) try { rs.close(); } catch (SQLException e) {} if (pst
+                !=null) try { pst.close(); } catch (SQLException e) {} if (conn !=null) try { conn.close(); } catch
+                (SQLException e) {} } %>
                 <!DOCTYPE html>
                 <html>
 
@@ -80,11 +81,13 @@
                                             </div>
 
                                             <div class="d-flex justify-content-end gap-2">
-                                                <a href="${pageContext.request.contextPath}/view/reservations-list" class="btn btn-secondary">Back to
+                                                <a href="${pageContext.request.contextPath}/view/reservations-list"
+                                                    class="btn btn-secondary">Back to
                                                     List</a>
 
                                                 <% if ("Confirmed".equals(status) || "Pending" .equals(status)) { %>
-                                                    <form action="reservation" method="POST" style="display:inline;">
+                                                    <form action="${pageContext.request.contextPath}/reservation"
+                                                        method="POST" style="display:inline;">
                                                         <input type="hidden" name="action" value="update_status">
                                                         <input type="hidden" name="id" value="<%= resId %>">
                                                         <input type="hidden" name="new_status" value="Checked-In">
@@ -92,8 +95,8 @@
                                                             Guest</button>
                                                     </form>
                                                     <% } else if ("Checked-In".equals(status)) { %>
-                                                        <form action="reservation" method="POST"
-                                                            style="display:inline;">
+                                                        <form action="${pageContext.request.contextPath}/reservation"
+                                                            method="POST" style="display:inline;">
                                                             <input type="hidden" name="action" value="update_status">
                                                             <input type="hidden" name="id" value="<%= resId %>">
                                                             <input type="hidden" name="new_status" value="Checked-Out">

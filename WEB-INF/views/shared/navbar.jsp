@@ -46,7 +46,7 @@
                                 <li>
                                     <hr class="dropdown-divider" style="border-color: var(--border-color);">
                                 </li>
-                                <li><a class="dropdown-item text-danger" href="logout"><i
+                                <li><a class="dropdown-item text-danger" href="${pageContext.request.contextPath}/logout"><i
                                             class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
                             </ul>
                         </li>
