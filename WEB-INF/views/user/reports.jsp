@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-    <% if (session.getAttribute("user_id")==null) { response.sendRedirect(request.getContextPath() + "/index.jsp"); return; } %>
+    <% if (session.getAttribute("user_id")==null) { response.sendRedirect(request.getContextPath() + "/index.jsp" );
+        return; } %>
         <!DOCTYPE html>
         <html>
 
@@ -26,6 +27,9 @@
             <!-- Docx & FileSaver -->
             <script src="https://unpkg.com/docx@7.1.0/build/index.js"></script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+            <script>
+                window.contextPath = '${pageContext.request.contextPath}';
+            </script>
         </head>
 
         <body>
@@ -43,7 +47,8 @@
                 </div>
 
                 <!-- Main Application Logic -->
-                <script type="text/babel" src="${pageContext.request.contextPath}/js/reports.js"></script>
+                <script type="text/babel"
+                    src="${pageContext.request.contextPath}/js/reports.js?v=<%= System.currentTimeMillis() %>"></script>
 
                 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
         </body>

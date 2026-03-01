@@ -29,7 +29,8 @@ const ReportsDashboard = () => {
     useEffect(() => {
         setLoading(true);
         // Fetch bookings for the selected scope
-        fetch('api/reports?action=bookings&year=' + sqFilters.year + '&month=' + sqFilters.month)
+        const apiUrl = (window.contextPath || '') + '/api/reports?action=bookings&year=' + sqFilters.year + '&month=' + sqFilters.month;
+        fetch(apiUrl)
             .then(res => res.json())
             .then(data => {
                 setBookings(data);
