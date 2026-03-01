@@ -16,30 +16,42 @@ jobs:
     
     steps:
     - name: Checkout code
-      uses: actions/checkout@v4
+      uses: actions/checkout@v3
     
     - name: Set up JDK ${{ matrix.java-version }}
-      uses: actions/setup-java@v4
+      uses: actions/setup-java@v3
       with:
         java-version: ${{ matrix.java-version }}
         distribution: 'temurin'
-        cache: maven
     
-    - name: Compile with Maven
-      run: mvn clean compile
+    - name: Create build directory
+      run: mkdir -p target/classes
+    
+    - name: Compile Java classes from src/main/java
+      run: |
+        javac -d target/classes \
+          -source 11 -target 11 \
+          src/main/java/com/oceanview/model/*.java \
+          src/main/java/com/oceanview/util/*.java \
+          src/main/java/com/oceanview/dao/*.java \
+          src/main/java/com/oceanview/dto/*.java \
+          src/main/java/com/oceanview/service/*.java \
+          src/main/java/com/oceanview/controller/*.java
     
     - name: Verify compilation
       run: |
-        echo "✓ MVC Application compiled successfully"
+        echo "✓ MVC Controller classes compiled"
+        ls -la target/classes/com/oceanview/controller/
         echo "✓ Total compiled classes:"
         find target/classes -name "*.class" | wc -l
     
     - name: Run Unit Tests
-      run: mvn test
+      run: |
+        mvn clean test --file pom.xml
       continue-on-error: true
     
     - name: Publish Test Results
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v3
       if: always()
       with:
         name: test-reports
@@ -47,13 +59,22 @@ jobs:
         retention-days: 30
     
     - name: Package WAR artifact
-      run: mvn package -DskipTests
+      run: |
+        cd ${{ github.workspace }}
+        zip -r Ocean-resort_2.war \
+          *.jsp \
+          css/ \
+          js/ \
+          sql/ \
+          docs/ \
+          WEB-INF/ \
+          -x "*.class"
     
     - name: Upload WAR artifact
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v3
       with:
         name: ocean-resort-app
-        path: target/*.war
+        path: Ocean-resort_2.war
         retention-days: 30
     
     - name: Build status report
