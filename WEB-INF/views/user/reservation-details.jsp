@@ -103,10 +103,13 @@
                                                             <button type="submit" class="btn btn-dark">Check Out
                                                                 Guest</button>
                                                         </form>
-                                                        <% } %>
+                                                        <% } else if ("Checked-Out".equals(status)) { %>
+                                                            <a href="${pageContext.request.contextPath}/view/print-bill?id=<%= resId %>"
+                                                                class="btn btn-primary">Print Bill</a>
+                                                            <% } %>
 
-                                                            <a href="${pageContext.request.contextPath}/view/reservation-edit?id=<%= resId %>"
-                                                                class="btn btn-warning">Edit</a>
+                                                                <a href="${pageContext.request.contextPath}/view/reservation-edit?id=<%= resId %>"
+                                                                    class="btn btn-warning">Edit</a>
                                             </div>
                                         </div>
                                     </div>

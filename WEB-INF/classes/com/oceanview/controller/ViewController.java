@@ -28,7 +28,8 @@ import java.util.Map;
         "/view/admin-notices",
         "/view/home",
         "/view/booking",
-        "/view/booking-success"
+        "/view/booking-success",
+        "/view/print-bill"
 })
 public class ViewController extends HttpServlet {
 
@@ -55,6 +56,7 @@ public class ViewController extends HttpServlet {
         VIEW_MAP.put("/view/home", "/WEB-INF/views/public/home.jsp");
         VIEW_MAP.put("/view/booking", "/WEB-INF/views/public/booking.jsp");
         VIEW_MAP.put("/view/booking-success", "/WEB-INF/views/public/booking-success.jsp");
+        VIEW_MAP.put("/view/print-bill", "/WEB-INF/views/user/print-bill.jsp");
     }
 
     @Override
