@@ -134,45 +134,86 @@
                                 </div>
                             </div>
 
-                            <table class="table table-bordered mb-4">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th>Description</th>
-                                        <th class="text-center">Rate</th>
-                                        <th class="text-center">Nights</th>
-                                        <th class="text-end">Total</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            <%= roomType %> Room Accommodation
-                                        </td>
-                                        <td class="text-center">$<%= String.format("%.2f", ratePerNight) %>
-                                        </td>
-                                        <td class="text-center">x <%= nights %>
-                                        </td>
-                                        <td class="text-end">$<%= String.format("%.2f", totalBill) %>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                                <tfoot>
-                                    <tr class="total-row">
-                                        <td colspan="3" class="text-end">GRAND TOTAL:</td>
-                                        <td class="text-end text-primary">$<%= String.format("%.2f", totalBill) %>
-                                        </td>
-                                    </tr>
-                                </tfoot>
-                            </table>
+                            <%-- Success/Error Messages --%>
+                                <% String successMsg=request.getParameter("success"); %>
+                                    <% String errorMsg=request.getParameter("error"); %>
+                                        <% if (successMsg !=null) { %>
+                                            <div class="alert alert-success alert-dismissible fade show no-print"
+                                                role="alert">
+                                                <%= successMsg %>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                                        aria-label="Close"></button>
+                                            </div>
+                                            <% } %>
+                                                <% if (errorMsg !=null) { %>
+                                                    <div class="alert alert-danger alert-dismissible fade show no-print"
+                                                        role="alert">
+                                                        <%= errorMsg %>
+                                                            <button type="button" class="btn-close"
+                                                                data-bs-dismiss="alert" aria-label="Close"></button>
+                                                    </div>
+                                                    <% } %>
 
-                            <div class="text-center mt-5 mb-4">
-                                <p>Thank you for choosing Ocean View Resort!</p>
-                                <div class="no-print mt-3">
-                                    <button onclick="window.print()" class="btn btn-success me-2">Print Bill</button>
-                                    <a href="${pageContext.request.contextPath}/view/reservation-details?id=<%= resId %>"
-                                        class="btn btn-secondary">Back</a>
-                                </div>
-                            </div>
+                                                        <table class="table table-bordered mb-4">
+                                                            <thead class="table-light">
+                                                                <tr>
+                                                                    <th>Description</th>
+                                                                    <th class="text-center">Rate</th>
+                                                                    <th class="text-center">Nights</th>
+                                                                    <th class="text-end">Total</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td>
+                                                                        <%= roomType %> Room Accommodation
+                                                                    </td>
+                                                                    <td class="text-center">$<%= String.format("%.2f",
+                                                                            ratePerNight) %>
+                                                                    </td>
+                                                                    <td class="text-center">x <%= nights %>
+                                                                    </td>
+                                                                    <td class="text-end">$<%= String.format("%.2f",
+                                                                            totalBill) %>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                            <tfoot>
+                                                                <tr class="total-row">
+                                                                    <td colspan="3" class="text-end">GRAND TOTAL:</td>
+                                                                    <td class="text-end text-primary">$<%=
+                                                                            String.format("%.2f", totalBill) %>
+                                                                    </td>
+                                                                </tr>
+                                                            </tfoot>
+                                                        </table>
+
+                                                        <div class="text-center mt-5 mb-4">
+                                                            <p>Thank you for choosing Ocean View Resort!</p>
+                                                            <div
+                                                                class="no-print mt-3 d-flex justify-content-center gap-2">
+                                                                <button onclick="window.print()"
+                                                                    class="btn btn-primary">
+                                                                    <i class="bi bi-printer"></i> Print Bill
+                                                                </button>
+
+                                                                <form
+                                                                    action="<%= request.getContextPath() %>/reservation"
+                                                                    method="post" class="d-inline">
+                                                                    <input type="hidden" name="action"
+                                                                        value="send_bill_email">
+                                                                    <input type="hidden" name="id" value="<%= resId %>">
+                                                                    <button type="submit" class="btn btn-success">
+                                                                        <i class="bi bi-envelope"></i> Send to Email
+                                                                    </button>
+                                                                </form>
+
+                                                                <a href="<%= request.getContextPath() %>/view/reservation-details?id=<%= resId %>"
+                                                                    class="btn btn-secondary">
+                                                                    Back
+                                                                </a>
+                                                            </div>
+                                                        </div>
                         </div>
                     </div>
                 </body>

@@ -8,6 +8,7 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import com.oceanview.util.DBConnection;
+import com.oceanview.util.EmailUtil;
 import com.oceanview.service.BillingService;
 import com.oceanview.service.ReservationService;
 
@@ -44,8 +45,73 @@ public class ReservationController extends HttpServlet {
             deleteReservation(request, response);
         } else if ("update_status".equals(action)) {
             updateStatus(request, response);
+        } else if ("send_bill_email".equals(action)) {
+            sendBillEmail(request, response);
         } else {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid action");
+        }
+    }
+
+    private void sendBillEmail(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        int resId = Integer.parseInt(request.getParameter("id"));
+
+        try (Connection conn = DBConnection.getConnection()) {
+            // Fetch Reservation Details
+            String resQuery = "SELECT * FROM reservations WHERE res_id = ?";
+            PreparedStatement pstRes = conn.prepareStatement(resQuery);
+            pstRes.setInt(1, resId);
+            ResultSet rsRes = pstRes.executeQuery();
+
+            if (rsRes.next()) {
+                String guestName = rsRes.getString("guest_name");
+                String guestEmail = rsRes.getString("email");
+                String roomType = rsRes.getString("room_type");
+                String checkIn = rsRes.getString("check_in");
+                String checkOut = rsRes.getString("check_out");
+
+                // Fetch Billing Details
+                String billQuery = "SELECT * FROM billing WHERE res_id = ?";
+                PreparedStatement pstBill = conn.prepareStatement(billQuery);
+                pstBill.setInt(1, resId);
+                ResultSet rsBill = pstBill.executeQuery();
+
+                if (rsBill.next()) {
+                    int nights = rsBill.getInt("nights");
+                    double rate = rsBill.getDouble("rate_per_night");
+                    double total = rsBill.getDouble("total_bill");
+
+                    // Format Email Body
+                    StringBuilder billDetails = new StringBuilder();
+                    billDetails.append("<b>Reservation ID:</b> #").append(resId).append("\n");
+                    billDetails.append("<b>Stay Dates:</b> ").append(checkIn).append(" to ").append(checkOut)
+                            .append("\n");
+                    billDetails.append("<b>Room Type:</b> ").append(roomType).append("\n");
+                    billDetails.append("<b>Total Nights:</b> ").append(nights).append("\n");
+                    billDetails.append("<b>Rate per Night:</b> $").append(String.format("%.2f", rate)).append("\n");
+                    billDetails.append("<hr>");
+                    billDetails.append("<h3>Total Bill: $").append(String.format("%.2f", total)).append("</h3>");
+
+                    boolean success = EmailUtil.sendBillEmail(guestEmail, guestName, billDetails.toString());
+
+                    if (success) {
+                        response.sendRedirect(request.getContextPath() + "/view/print-bill?id=" + resId
+                                + "&success=Email sent successfully");
+                    } else {
+                        response.sendRedirect(request.getContextPath() + "/view/print-bill?id=" + resId
+                                + "&error=Failed to send email. Check SMTP settings.");
+                    }
+                } else {
+                    response.sendRedirect(request.getContextPath() + "/view/print-bill?id=" + resId
+                            + "&error=Billing information not found");
+                }
+            } else {
+                response.sendRedirect(request.getContextPath() + "/view/reservations-list?error=Reservation not found");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.sendRedirect(request.getContextPath() + "/view/print-bill?id=" + resId + "&error=System error: "
+                    + e.getMessage());
         }
     }
 
