@@ -29,11 +29,17 @@ jobs:
           # Download MySQL connector
           curl -L -o lib/mysql-connector-j-8.3.0.jar \
             https://repo1.maven.org/maven2/com/mysql/mysql-connector-j/8.3.0/mysql-connector-j-8.3.0.jar
+          # Download JavaMail API
+          curl -L -o lib/javax.mail-1.6.2.jar \
+            https://repo1.maven.org/maven2/com/sun/mail/javax.mail/1.6.2/javax.mail-1.6.2.jar
+          # Download Activation Framework
+          curl -L -o lib/activation-1.1.1.jar \
+            https://repo1.maven.org/maven2/javax/activation/activation/1.1.1/activation-1.1.1.jar
 
       - name: Compile Java sources
         run: |
           cd WEB-INF/classes
-          javac -cp "../../lib/servlet-api.jar:../../lib/mysql-connector-j-8.3.0.jar:." \
+          javac -cp "../../lib/servlet-api.jar:../../lib/mysql-connector-j-8.3.0.jar:../../lib/javax.mail-1.6.2.jar:../../lib/activation-1.1.1.jar:." \
             com/oceanview/util/*.java \
             com/oceanview/model/*.java \
             com/oceanview/dto/*.java \
