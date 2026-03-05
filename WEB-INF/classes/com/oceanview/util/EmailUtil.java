@@ -19,7 +19,7 @@ public class EmailUtil {
     private static final String SMTP_HOST = "smtp.gmail.com";
     private static final String SMTP_PORT = "587";
     private static final String SMTP_USER = "chathumik2004@gmail.com"; // User email
-    private static final String SMTP_PASS = "ujhu uxkj iddr aeoq"; // App password or password
+    private static final String SMTP_PASS = "doyk pvhv dqjq egjf"; // App password or password
 
     /**
      * Sends a bill email to the guest.
