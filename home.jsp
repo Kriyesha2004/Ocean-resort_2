@@ -29,7 +29,8 @@
         <header class="hero-section">
             <div class="container hero-content">
                 <h1 class="display-3 fw-bold">Experience Paradise</h1>
-                <p class="lead mb-4">Escape to Ocean View Resort, where luxury meets the soothing rhythm of the waves.
+                <p class="lead mb-4">Escape to the Best Ocean View Resort, where luxury meets the soothing rhythm of the
+                    waves.
                     Your perfect vacation awaits.</p>
                 <a href="#rooms" class="btn btn-primary btn-lg px-5 py-3 rounded-pill fw-bold">Book Your Stay</a>
             </div>
