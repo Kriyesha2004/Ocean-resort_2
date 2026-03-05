@@ -4,8 +4,9 @@
             <%@ page import="com.oceanview.model.User" %>
                 <%@ page import="java.util.List" %>
                     <%@ page import="java.util.Map" %>
-                        <% if (session.getAttribute("user_id")==null) { response.sendRedirect(request.getContextPath() + "/index.jsp"); return; }
-                            UserDAO userDAO=new UserDAO(); MessageDAO messageDAO=new MessageDAO(); List<User> users =
+                        <% if (session.getAttribute("user_id")==null) { response.sendRedirect(request.getContextPath()
+                            + "/index.jsp" ); return; } UserDAO userDAO=new UserDAO(); MessageDAO messageDAO=new
+                            MessageDAO(); List<User> users =
                             userDAO.getAllUsers();
                             List<Map<String, Object>> sentMessages = messageDAO.getAllSentMessages();
                                 %>
@@ -47,7 +48,9 @@
                                                                         </div>
                                                                         <% } %>
 
-                                                                            <form action="send-message" method="post">
+                                                                            <form
+                                                                                action="${pageContext.request.contextPath}/send-message"
+                                                                                method="post">
                                                                                 <div class="mb-3">
                                                                                     <label
                                                                                         class="form-label">To:</label>
