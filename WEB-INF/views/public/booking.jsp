@@ -21,7 +21,7 @@
                     <!-- Progress/Header -->
                     <div class="text-center mb-5">
                         <h2 class="display-5 fw-bold font-playfair">Complete Your Reservation</h2>
-                        <p class="text-muted">You are just one step away from your perfect vacation</p>
+                        <p class="text-muted">You are just one step away from your perfect vacation and Holiday</p>
                     </div>
 
                     <div class="card shadow border-0 rounded-3">
