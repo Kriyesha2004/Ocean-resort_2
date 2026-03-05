@@ -47,7 +47,7 @@
                                             </div>
                                             <% session.removeAttribute("error"); } %>
 
-                                                <form action="settings" method="post" id="settingsForm">
+                                                <form action="${pageContext.request.contextPath}/settings" method="post" id="settingsForm">
 
                                                     <!-- Appearance Section -->
                                                     <div class="mb-4">
@@ -125,20 +125,16 @@
                 <!-- Bootstrap JS -->
                 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
                 <script>
-                    function saveSettings() {
-                        // In a real app, this would submit to a servlet
-                        // For now, just show a visual confirmation
-                        const btn = document.querySelector('button[onclick="saveSettings()"]');
-                        const originalText = btn.innerHTML;
-
-                        btn.innerHTML = '<i class="bi bi-check-circle"></i> Saved!';
-                        btn.classList.replace('btn-primary', 'btn-success');
-
-                        setTimeout(() => {
-                            btn.innerHTML = originalText;
-                            btn.classList.replace('btn-success', 'btn-primary');
-                        }, 2000);
-                    }
+                    // Display auto-hiding alerts
+                    document.addEventListener('DOMContentLoaded', function() {
+                        const alerts = document.querySelectorAll('.alert');
+                        alerts.forEach(alert => {
+                            setTimeout(() => {
+                                const bsAlert = new bootstrap.Alert(alert);
+                                bsAlert.close();
+                            }, 5000);
+                        });
+                    });
                 </script>
         </body>
 
